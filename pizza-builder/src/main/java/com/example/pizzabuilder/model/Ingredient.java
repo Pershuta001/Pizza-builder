@@ -30,6 +30,9 @@ public class Ingredient {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "price", nullable = false)
+    private Double price;
+
     @Column(name = "spicy")
     private Boolean spicy;
 
