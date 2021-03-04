@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(generator = "UUID")
@@ -27,13 +27,8 @@ public class User {
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Order> tags = new ArrayList<>();
-
+    @OneToMany
+    private List<Order> orders = new ArrayList<>();
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -44,10 +39,8 @@ public class User {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-
     @Embedded
     private Address address;
-
 
     @Column(name = "hashed_password", nullable = false)
     private String hashed_password;

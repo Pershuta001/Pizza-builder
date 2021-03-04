@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -29,6 +28,5 @@ public class PizzaPattern {
 
     @Column(name = "name", nullable = false)
     private String name;
-
 
 }

@@ -1,27 +1,27 @@
 package com.example.pizzabuilder.model;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.sql.Date;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@Entity(name = "Order")
-@Table(name = "order")
+@Entity
+@Table(name = "orders")
 public class Order {
     @EmbeddedId
     private OrderId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("user_uuid")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_uuid", nullable = false, updatable = false, insertable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("pizza_uuid")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pizza_uuid",nullable = false, updatable = false, insertable = false)
     private PizzaPattern pizzaPattern;
 
     @Column(name = "quantity", nullable = false)

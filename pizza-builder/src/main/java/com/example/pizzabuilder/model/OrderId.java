@@ -14,11 +14,9 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Embeddable
 public class OrderId implements Serializable {
-    @Column(name="pizza_uuid", nullable = false)
+    @Column(name="pizza_uuid")
     private UUID pizzaUUID;
 
-    @Column(name="user_uuid", nullable = false)
+    @Column(name="user_uuid")
     private UUID userUUID;
-
-
 }
