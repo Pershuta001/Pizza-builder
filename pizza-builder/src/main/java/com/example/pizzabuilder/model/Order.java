@@ -3,9 +3,12 @@ package com.example.pizzabuilder.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -13,19 +16,24 @@ import java.sql.Date;
 @Entity
 @Table(name = "orders")
 public class Order {
-    @EmbeddedId
-    private OrderId id;
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "uuid", updatable = false, nullable = false)
+    private UUID uuid;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_uuid", nullable = false, updatable = false, insertable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_uuid", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pizza_uuid",nullable = false, updatable = false, insertable = false)
-    private PizzaPattern pizzaPattern;
+    @OneToMany
+    private List<PizzaInOrder> pizzaInOrders;
 
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity;
+    @Column(name = "total_price", nullable = false)
+    private Double totalPrice;
 
     @Column(name = "date_time", nullable = false)
     private Date dataTime;
