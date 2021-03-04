@@ -20,9 +20,9 @@ public class Order {
     @MapsId("user_uuid")
     private User user;
 
-   /* @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("pizza_uuid")
-    private PizzaPattern pizzaPattern;*/
+    private PizzaPattern pizzaPattern;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
