@@ -1,6 +1,5 @@
 package com.example.pizzabuilder.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +15,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "ingredient_group")
-public class IngredientGroup {
+@Table(name = "pizza_pattern")
+public class PizzaPattern {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -31,6 +30,5 @@ public class IngredientGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Ingredient> ingredients;
+
 }

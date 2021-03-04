@@ -11,7 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "ingradient")
+@Table(name = "ingredient")
 public class Ingredient {
 
     @Id
@@ -23,8 +23,9 @@ public class Ingredient {
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
 
-    //TODO JoinColumn by group uuid
-    private UUID groupUuid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_uuid", nullable = false)
+    private IngredientGroup groupUuid;
 
     @Column(name = "name", nullable = false)
     private String name;
