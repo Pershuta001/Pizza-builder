@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -28,5 +29,15 @@ public class PizzaPattern {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name="confirmed", nullable = false)
+    private Boolean confirmed;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_uuid")
+    private User userUUID;
+
+    @OneToMany
+    private List<PizzaInOrder> pizzaInOrders;
 
 }

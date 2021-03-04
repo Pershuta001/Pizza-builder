@@ -13,10 +13,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
-public class OrderId implements Serializable {
-    @Column(name="pizza_uuid")
-    private UUID pizzaUUID;
+public class PizzaInOrderId implements Serializable {
+    @Column(name="pizza_pattern_uuid", nullable = false)
+    private UUID pizzaPatternUUID;
 
-    @Column(name="user_uuid")
-    private UUID userUUID;
+    @Column(name="orders_uuid",nullable = false)
+    private UUID ordersUUID;
+
+    @Column(name = "pizza_size", nullable = false)
+    private Integer pizzaSize;
 }

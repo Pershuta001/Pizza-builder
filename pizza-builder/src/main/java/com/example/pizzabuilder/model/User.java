@@ -27,8 +27,13 @@ public class User {
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
 
-    @OneToMany
-    private List<Order> orders = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_uuid")
+    private List<Order> orders;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pizza_pattern_uuid")
+    private List<PizzaPattern> pizzaPatterns;
 
     @Column(name = "name", nullable = false)
     private String name;
