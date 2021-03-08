@@ -27,7 +27,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "user_uuid", nullable = false)
-    private User user;
+    private UserEntity userEntity;
 
     @OneToMany
     private List<PizzaInOrder> pizzaInOrders;

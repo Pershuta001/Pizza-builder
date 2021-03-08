@@ -35,7 +35,7 @@ public class PizzaPattern {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_uuid")
-    private User userUUID;
+    private UserEntity userEntityUUID;
 
     @OneToMany
     private List<PizzaInOrder> pizzaInOrders;

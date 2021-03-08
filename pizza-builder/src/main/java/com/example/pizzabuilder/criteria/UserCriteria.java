@@ -1,9 +1,9 @@
 package com.example.pizzabuilder.criteria;
 
-import com.example.pizzabuilder.model.User;
+import com.example.pizzabuilder.model.UserEntity;
 
-public class UserCriteria extends Criteria<User> {
+public class UserCriteria extends Criteria<UserEntity> {
     public UserCriteria() {
-        super(User.class);
+        super(UserEntity.class);
     }
 }

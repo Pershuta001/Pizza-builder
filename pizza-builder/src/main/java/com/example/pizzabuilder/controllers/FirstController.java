@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FirstController {
 
     @ResponseBody
-    @GetMapping("/")
+    @GetMapping("/success")
     public ResponseEntity<String> firstResponse(){
        return new ResponseEntity<String>("success", HttpStatus.OK);
     }

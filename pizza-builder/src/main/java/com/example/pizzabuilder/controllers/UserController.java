@@ -1,6 +1,6 @@
 package com.example.pizzabuilder.controllers;
 
-import com.example.pizzabuilder.model.User;
+import com.example.pizzabuilder.model.UserEntity;
 import com.example.pizzabuilder.sevices.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +18,7 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/exist")
-    public Optional<User> existByEmail(
+    public Optional<UserEntity> existByEmail(
             @RequestParam String email
     ){
         return userService.existByEmail(email);
