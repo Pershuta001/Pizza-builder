@@ -49,4 +49,7 @@ public class UserEntity {
 
     @Column(name = "hashed_password", nullable = false)
     private String hashed_password;
+
+    @Column(name = "role", nullable = false)
+    private Integer role;
 }
