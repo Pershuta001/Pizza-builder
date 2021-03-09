@@ -1,7 +1,10 @@
 package com.example.pizzabuilder.settings.jwt;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,22 +21,27 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class JwtTokenVerifier extends OncePerRequestFilter {
+
+    private final JwtConfig jwtConfig;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String token = request.getHeader("Authorization");
+        String tokenWithPrefix = request.getHeader("Authorization");
 
-        if(token == null || token.length()==0){
+        if(tokenWithPrefix == null || tokenWithPrefix.length()==0 || !tokenWithPrefix.startsWith(jwtConfig.TOKEN_PREFIX)){
             filterChain.doFilter(request,response);
             return;
         }
         try{
+            String token = tokenWithPrefix.replaceFirst(jwtConfig.TOKEN_PREFIX,"");
             JwtParser parser = Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor("pizzabuildersecurecodepizzabuildersecurecode".getBytes()))
+                    .setSigningKey(jwtConfig.signingSecretKey())
                     .build();
             Claims body = parser.parseClaimsJws(token).getBody();
             String userEmail = body.getSubject();
@@ -53,7 +61,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException e){
-            throw new IllegalStateException("Token can`t be trusted: " + token);
+            throw new IllegalStateException("Token can`t be trusted: " + tokenWithPrefix);
         }
         filterChain.doFilter(request,response);
     }

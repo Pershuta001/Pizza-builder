@@ -3,8 +3,8 @@ package com.example.pizzabuilder.settings.auth;
 import com.example.pizzabuilder.enums.RolesEnum;
 import com.example.pizzabuilder.model.UserEntity;
 import com.example.pizzabuilder.repositories.UserRepository;
+import com.example.pizzabuilder.settings.jwt.JwtConfig;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +25,7 @@ import java.util.Set;
 public class ApplicationUserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final JwtConfig jwtConfig;
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -41,17 +42,15 @@ public class ApplicationUserService implements UserDetailsService {
                 true,
                 true,
                 authorities
-               );
+        );
     }
 
-    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities){
-        return Jwts.builder()
+    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
+        return jwtConfig.TOKEN_PREFIX + Jwts.builder()
                 .setSubject(username)
                 .claim("authorities", authorities)
-                .setExpiration(Date.valueOf((LocalDate.now().plusDays(3))))
-                .signWith(Keys.hmacShaKeyFor("pizzabuildersecurecodepizzabuildersecurecode".getBytes()))
+                .setExpiration(Date.valueOf((LocalDate.now().plusDays(jwtConfig.EXPIRATION_DAY))))
+                .signWith(jwtConfig.signingSecretKey())
                 .compact();
     }
-
-
 }

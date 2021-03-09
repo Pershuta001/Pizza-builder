@@ -2,6 +2,7 @@ package com.example.pizzabuilder.settings.auth;
 
 import com.example.pizzabuilder.enums.RolesEnum;
 import com.example.pizzabuilder.settings.jwt.JWTAuthenticationFilter;
+import com.example.pizzabuilder.settings.jwt.JwtConfig;
 import com.example.pizzabuilder.settings.jwt.JwtTokenVerifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class AuthConfig extends WebSecurityConfigurerAdapter {
 
     private final ApplicationUserService applicationUserService;
+    private final JwtConfig jwtConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,7 +31,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(), applicationUserService))
-                .addFilterAfter(new JwtTokenVerifier(), JWTAuthenticationFilter.class)
+                .addFilterAfter(new JwtTokenVerifier(jwtConfig), JWTAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/secured-api").hasRole(RolesEnum.USER.name())
                 .antMatchers("/secured-api-admin").hasRole(RolesEnum.ADMIN.name())
@@ -41,8 +43,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) {
-        auth
-                .authenticationProvider(daoAuthenticationProvider());
+        auth.authenticationProvider(daoAuthenticationProvider());
     }
 
     @Bean
