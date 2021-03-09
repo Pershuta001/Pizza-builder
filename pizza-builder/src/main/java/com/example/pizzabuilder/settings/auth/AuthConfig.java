@@ -1,6 +1,8 @@
 package com.example.pizzabuilder.settings.auth;
 
-import com.example.pizzabuilder.jwt.JWTAuthenticationFilter;
+import com.example.pizzabuilder.enums.RolesEnum;
+import com.example.pizzabuilder.settings.jwt.JWTAuthenticationFilter;
+import com.example.pizzabuilder.settings.jwt.JwtTokenVerifier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -27,9 +28,12 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(new JWTAuthenticationFilter(authenticationManager(),applicationUserService))
+                .addFilter(new JWTAuthenticationFilter(authenticationManager(), applicationUserService))
+                .addFilterAfter(new JwtTokenVerifier(), JWTAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/","/sign-up")
+                .antMatchers("/secured-api").hasRole(RolesEnum.USER.name())
+                .antMatchers("/secured-api-admin").hasRole(RolesEnum.ADMIN.name())
+                .antMatchers("/", "/sign-up")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
@@ -38,7 +42,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) {
         auth
-               .authenticationProvider(daoAuthenticationProvider());
+                .authenticationProvider(daoAuthenticationProvider());
     }
 
     @Bean
@@ -47,17 +51,10 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(){
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(bCryptPasswordEncoder());
-     //   System.out.println(bCryptPasswordEncoder().encode("asd"));
         provider.setUserDetailsService(applicationUserService);
         return provider;
     }
-    @SuppressWarnings("deprecation")
-    @Bean
-    public static NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-    }
-
 }

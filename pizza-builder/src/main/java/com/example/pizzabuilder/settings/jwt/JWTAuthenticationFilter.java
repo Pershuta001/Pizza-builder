@@ -1,25 +1,19 @@
-package com.example.pizzabuilder.jwt;
+package com.example.pizzabuilder.settings.jwt;
 
 import com.example.pizzabuilder.settings.auth.ApplicationUserService;
 import com.example.pizzabuilder.view.UserViewLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Collection;
 
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -48,9 +42,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication authResult) {
 
-
-        response.addHeader("Authorization",applicationUserService.generateToken(authResult.getName(),authResult.getAuthorities()));
+        response.addHeader(
+                "Authorization",
+                applicationUserService.generateToken(
+                        authResult.getName(),
+                        authResult.getAuthorities()));
     }
-
-
 }

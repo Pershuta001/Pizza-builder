@@ -28,6 +28,22 @@ public class UserController {
         return userService.existByEmail(email);
     }
 
+    /**
+     * {
+     *     "name":"name",
+     *     "email": "mail@mail.com",
+     *     "phone": "9876543210",
+     *     "address":{
+     *         "city": "city",
+     *         "street": "street",
+     *         "build": 1,
+     *         "flat": 1
+     *     },
+     *     "password":"password"
+     * }
+     * @param userViewSignUp
+     * @return
+     */
     @ResponseBody
     @PostMapping("/sign-up")
     public ResponseEntity<UserEntity> addNewUser(
