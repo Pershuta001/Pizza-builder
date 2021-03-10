@@ -15,7 +15,6 @@ public class FirstController {
 
     @ResponseBody
     @GetMapping("/secured-api")
-    //@PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserViewLogin> firstResponse() {
         return  ResponseEntity.ok(UserViewLogin.builder().email("success").password("password").build());
     }

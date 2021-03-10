@@ -1,9 +1,12 @@
 package com.example.pizzabuilder.settings.jwt;
 
 import com.example.pizzabuilder.settings.auth.ApplicationUserService;
+import com.example.pizzabuilder.sevices.UserService;
 import com.example.pizzabuilder.view.UserViewLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.XSlf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -26,13 +30,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                                 HttpServletResponse response) throws AuthenticationException {
         try {
             UserViewLogin userViewLogin = new ObjectMapper().readValue(request.getInputStream(), UserViewLogin.class);
+            log.info("New attempt to authenticate: " + userViewLogin);
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     userViewLogin.getEmail(),
                     userViewLogin.getPassword()
             );
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
-          throw new RuntimeException("User not authenticated");
+            logger.error("User not authenticated");
+            throw new RuntimeException("User not authenticated");
         }
     }
 
@@ -42,10 +48,20 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication authResult) {
 
+
         response.addHeader(
                 "Authorization",
                 applicationUserService.generateToken(
                         authResult.getName(),
                         authResult.getAuthorities()));
+        try {
+
+            response
+                    .getWriter()
+                    .write(applicationUserService.responseUser( authResult.getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        log.info("Authentication for {} was success",authResult.getName());
     }
 }

@@ -4,8 +4,11 @@ import com.example.pizzabuilder.enums.RolesEnum;
 import com.example.pizzabuilder.model.UserEntity;
 import com.example.pizzabuilder.repositories.UserRepository;
 import com.example.pizzabuilder.settings.jwt.JwtConfig;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -22,6 +25,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ApplicationUserService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -31,6 +35,7 @@ public class ApplicationUserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(login);
         if (!userEntityOptional.isPresent()) {
+            log.error("User with login: {} not found.",login);
             throw new UsernameNotFoundException("User with login: " + login + " not found.");
         }
         UserEntity user = userEntityOptional.get();
@@ -43,6 +48,17 @@ public class ApplicationUserService implements UserDetailsService {
                 true,
                 authorities
         );
+    }
+
+    @SneakyThrows
+    public String responseUser(String userEmail){
+       UserEntity user = userRepository.findByEmail(userEmail).get();
+       String res = "{";
+       res += String.format("\"name\": \"%s\",", user.getName());
+       res += String.format("\"email\": \"%s\",", user.getEmail());
+       res += String.format("\"phone\": \"%s\",", user.getPhone());
+       res += "\"address\":"+new ObjectMapper().writeValueAsString(user.getAddress())+"}";
+       return res;
     }
 
     public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {

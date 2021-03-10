@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,10 +23,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
     private final JwtConfig jwtConfig;
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -36,6 +37,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
         if(tokenWithPrefix == null || tokenWithPrefix.length()==0 || !tokenWithPrefix.startsWith(jwtConfig.TOKEN_PREFIX)){
             filterChain.doFilter(request,response);
+            log.error("No token or token has wrong prefix");
             return;
         }
         try{
@@ -61,6 +63,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (JwtException e){
+            log.error("Token can`t be trusted: {}",tokenWithPrefix);
             throw new IllegalStateException("Token can`t be trusted: " + tokenWithPrefix);
         }
         filterChain.doFilter(request,response);
