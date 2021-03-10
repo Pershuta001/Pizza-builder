@@ -58,7 +58,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             response
                     .getWriter()
-                    .write(applicationUserService.responseUser( authResult.getName()));
+                    .write(applicationUserService.responseUser());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -46,7 +46,7 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/sign-up")
-    public ResponseEntity<UserEntity> addNewUser(
+    public ResponseEntity<String> addNewUser(
             @RequestBody UserViewSignUp userViewSignUp
             ){
         UserEntity userEntity = userService.saveNewUser(userViewSignUp);
@@ -56,6 +56,6 @@ public class UserController {
         return ResponseEntity
                 .ok()
                 .headers(headers)
-                .body(userEntity);
+                .body(applicationUserService.responseUser());
     }
 }

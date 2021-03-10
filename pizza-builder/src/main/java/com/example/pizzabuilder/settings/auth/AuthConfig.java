@@ -27,7 +27,6 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
     private final ApplicationUserService applicationUserService;
     private final JwtConfig jwtConfig;
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.

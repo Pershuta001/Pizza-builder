@@ -30,6 +30,7 @@ public class ApplicationUserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final JwtConfig jwtConfig;
+    private UserEntity user;
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -38,7 +39,7 @@ public class ApplicationUserService implements UserDetailsService {
             log.error("User with login: {} not found.",login);
             throw new UsernameNotFoundException("User with login: " + login + " not found.");
         }
-        UserEntity user = userEntityOptional.get();
+        user = userEntityOptional.get();
         Set<SimpleGrantedAuthority> authorities = RolesEnum.values()[user.getRole()].getGrantedAuthorities();
         return new User(user.getEmail(),
                 user.getHashed_password(),
@@ -51,9 +52,8 @@ public class ApplicationUserService implements UserDetailsService {
     }
 
     @SneakyThrows
-    public String responseUser(String userEmail){
-       UserEntity user = userRepository.findByEmail(userEmail).get();
-       String res = "{";
+    public String responseUser(){
+        String res = "{";
        res += String.format("\"name\": \"%s\",", user.getName());
        res += String.format("\"email\": \"%s\",", user.getEmail());
        res += String.format("\"phone\": \"%s\",", user.getPhone());
