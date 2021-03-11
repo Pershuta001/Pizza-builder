@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.sevices;
 
+
 import com.example.pizzabuilder.model.Address;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.model.User;
@@ -21,6 +22,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
+    public Optional<User> existByEmail(@NotNull final String email){
+        return userRepository.findByEmail(email);
+    }
+    public List<User> getAll(){
+     return null;
+    }
     public User setAddress(UUID userId, Address address) throws Exception{
         Optional<User> userOptional = userRepository.findById(userId);
         if(!userOptional.isPresent())
@@ -74,6 +81,4 @@ public class UserService {
         pizzaPatterns.add(pizzaPattern);
         return userRepository.saveAndFlush(user);
     }
-
-
 }
