@@ -1,6 +1,9 @@
 package com.example.pizzabuilder.sevices;
 
 
+import com.example.pizzabuilder.criteria.Criteria;
+import com.example.pizzabuilder.criteria.UserCriteria;
+import com.example.pizzabuilder.exceptions.WrongRestrictionException;
 import com.example.pizzabuilder.model.Address;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.model.User;
@@ -19,6 +22,10 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public Criteria<User> parse(String restrict) throws WrongRestrictionException {
+        return new UserCriteria(restrict);
+    }
 
     @Transactional
     public Optional<User> existByEmail(@NotNull final String email){
