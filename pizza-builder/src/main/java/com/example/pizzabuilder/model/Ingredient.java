@@ -41,4 +41,8 @@ public class Ingredient {
 
     @Column(name = "vegan")
     private Boolean vegan;
+
+    @Lob
+    @Column(name="picture")
+    private byte [] photo;
 }
