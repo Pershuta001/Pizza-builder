@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +25,9 @@ public class User {
     )
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
+
+    @Column(name = "roleId")
+    private Integer roleId;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_uuid")
