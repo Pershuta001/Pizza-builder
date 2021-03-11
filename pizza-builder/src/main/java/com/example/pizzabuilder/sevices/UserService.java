@@ -7,7 +7,6 @@ import com.example.pizzabuilder.model.User;
 import com.example.pizzabuilder.repositories.UserRepository;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
