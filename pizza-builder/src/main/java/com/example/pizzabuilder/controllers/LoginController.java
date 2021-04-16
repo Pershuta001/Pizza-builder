@@ -3,6 +3,7 @@ package com.example.pizzabuilder.controllers;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController {
 
     @ResponseBody
