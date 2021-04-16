@@ -6,6 +6,7 @@ import com.example.pizzabuilder.convertors.UserConvertor;
 import com.example.pizzabuilder.criteria.Criteria;
 import com.example.pizzabuilder.criteria.UserCriteria;
 import com.example.pizzabuilder.enums.RolesEnum;
+import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.exceptions.WrongRestrictionException;
 import com.example.pizzabuilder.model.Address;
 import com.example.pizzabuilder.model.PizzaPattern;
@@ -56,14 +57,14 @@ public class UserService {
         return userRepository.findAll();
     }
     @Transactional
-    public UserEntity updateUser(UUID uuid, String name, String phone, byte [] photo) throws Exception{
-        Optional<UserEntity> userOptional = userRepository.findById(uuid);
+    public UserEntity updateUser(UserViewSignUp userViewSignUp) throws Exception{
+        Optional<UserEntity> userOptional = userRepository.findByEmail(userViewSignUp.getEmail());
         if(!userOptional.isPresent())
-            throw new Exception("e");
+            throw new EntityNotExistsException(UserEntity.class, userViewSignUp.getEmail());;
         UserEntity user = userOptional.get();
-        user.setName(name);
-        user.setPhone(phone);
-        user.setPhoto(photo);
+        user.setName(userViewSignUp.getName());
+        user.setPhone(userViewSignUp.getPhone());
+        user.setAddress(userViewSignUp.getAddress());
         return userRepository.saveAndFlush(user);
     }
     @Transactional
@@ -75,17 +76,7 @@ public class UserService {
         user.setHashed_password(hashed_password);
         return userRepository.saveAndFlush(user);
     }
-    @Transactional
-    public UserEntity setEmail(UUID uuid, String email) throws Exception{
-        Optional<UserEntity> userOptional = userRepository.findById(uuid);
-        if(!userOptional.isPresent())
-            throw new Exception("e");
-        if(userRepository.findByEmail(email).isPresent())
-            throw new Exception("e");
-        UserEntity user = userOptional.get();
-        user.setEmail(email);
-        return userRepository.saveAndFlush(user);
-    }
+
     @Transactional
     public UserEntity addPizzaPattern(UUID uuid, PizzaPattern pizzaPattern) throws Exception{
         Optional<UserEntity> userOptional = userRepository.findById(uuid);

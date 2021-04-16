@@ -60,6 +60,15 @@ public class ApplicationUserService implements UserDetailsService {
        res += "\"address\":"+new ObjectMapper().writeValueAsString(user.getAddress())+"}";
        return res;
     }
+    @SneakyThrows
+    public String responseUser(UserEntity user){
+        String res = "{";
+        res += String.format("\"name\": \"%s\",", user.getName());
+        res += String.format("\"email\": \"%s\",", user.getEmail());
+        res += String.format("\"phone\": \"%s\",", user.getPhone());
+        res += "\"address\":"+new ObjectMapper().writeValueAsString(user.getAddress())+"}";
+        return res;
+    }
 
     public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
         return jwtConfig.TOKEN_PREFIX + Jwts.builder()

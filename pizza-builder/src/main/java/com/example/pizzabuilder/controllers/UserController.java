@@ -7,6 +7,7 @@ import com.example.pizzabuilder.view.UserViewSignUp;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,5 +59,17 @@ public class UserController {
                 .ok()
                 .headers(headers)
                 .body(applicationUserService.responseUser());
+    }
+
+    @ResponseBody
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/update-user")
+    public ResponseEntity<String> updateUser(
+            @RequestBody UserViewSignUp userViewSignUp
+    ) throws Exception {
+        UserEntity userEntity = userService.updateUser(userViewSignUp);
+        return ResponseEntity
+                .ok()
+                .body(applicationUserService.responseUser(userEntity));
     }
 }
