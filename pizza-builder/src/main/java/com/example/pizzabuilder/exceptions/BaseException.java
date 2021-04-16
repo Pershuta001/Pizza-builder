@@ -21,20 +21,4 @@ public abstract class BaseException extends Exception {
         super(message);
         this.messageCode = message;
     }
-
-    /**
-     * override this method to create custom message for users
-     *
-     * @return converted message
-     */
-    public abstract String formMessage(MessageSource messageSource, Locale locale);
-
-    /**
-     * override this method to create a list of errors for user
-     *
-     * return null to show that exception has no list of errors
-     *
-     * @return list of errors
-     */
-    public abstract List<String> formListErrors(MessageSource messageSource, Locale locale);
 }
