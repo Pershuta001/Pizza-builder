@@ -37,7 +37,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
         if(tokenWithPrefix == null || tokenWithPrefix.length()==0 || !tokenWithPrefix.startsWith(jwtConfig.TOKEN_PREFIX)){
             filterChain.doFilter(request,response);
-            log.error("No token or token has wrong prefix");
             return;
         }
         try{
