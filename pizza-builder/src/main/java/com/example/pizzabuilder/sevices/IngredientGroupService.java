@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.sevices;
 
+import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.IngredientGroup;
 import com.example.pizzabuilder.repositories.IngredientGroupRepository;
@@ -24,7 +25,7 @@ public class IngredientGroupService {
     public IngredientGroup findById(UUID uuid) throws Exception{
         Optional<IngredientGroup> ingredientGroup = ingredientGroupRepository.findById(uuid);
         if(!ingredientGroup.isPresent())
-            throw new Exception("e");
+            throw new EntityNotExistsException(IngredientGroup.class, uuid);
         return ingredientGroup.get();
     }
 
@@ -41,7 +42,7 @@ public class IngredientGroupService {
     public IngredientGroup addIngredients(UUID ingredientGroupUUID, List<Ingredient> ingredients) throws Exception{
         Optional<IngredientGroup> ingredientGroupOptional = ingredientGroupRepository.findById(ingredientGroupUUID);
         if(!ingredientGroupOptional.isPresent())
-            throw new Exception("e");
+            throw new EntityNotExistsException(IngredientGroup.class, ingredientGroupUUID);
         for (Ingredient ingredient:ingredients) {
             if(ingredient.getGroupUuid()!=null)
                 throw new Exception("e");

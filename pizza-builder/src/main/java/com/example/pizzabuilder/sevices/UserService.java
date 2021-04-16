@@ -1,8 +1,12 @@
 package com.example.pizzabuilder.sevices;
 
 
+
 import com.example.pizzabuilder.convertors.UserConvertor;
+import com.example.pizzabuilder.criteria.Criteria;
+import com.example.pizzabuilder.criteria.UserCriteria;
 import com.example.pizzabuilder.enums.RolesEnum;
+import com.example.pizzabuilder.exceptions.WrongRestrictionException;
 import com.example.pizzabuilder.model.Address;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.model.UserEntity;
@@ -23,6 +27,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserConvertor userConvertor;
+
+    public Criteria<UserEntity> parse(String restrict) throws WrongRestrictionException {
+        return new UserCriteria(restrict);
+    }
 
     @Transactional
     public Optional<UserEntity> existByEmail(@NotNull final String email) {
