@@ -57,6 +57,7 @@ public class ApplicationUserService implements UserDetailsService {
        res += String.format("\"name\": \"%s\",", user.getName());
        res += String.format("\"email\": \"%s\",", user.getEmail());
        res += String.format("\"phone\": \"%s\",", user.getPhone());
+       res += String.format("\"role\": \"%s\",", RolesEnum.values()[user.getRoleId()]);
        res += "\"address\":"+new ObjectMapper().writeValueAsString(user.getAddress())+"}";
        return res;
     }

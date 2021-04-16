@@ -1,8 +1,6 @@
 package com.example.pizzabuilder.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -12,6 +10,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Builder
+@Data
 @Embeddable
 public class PizzaInOrderId implements Serializable {
     @Column(name="pizza_pattern_uuid", nullable = false)

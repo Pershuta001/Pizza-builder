@@ -2,6 +2,7 @@ package com.example.pizzabuilder.model;
 
 import com.example.pizzabuilder.enums.OrderStatusEnum;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -40,7 +42,7 @@ public class Order {
     private Date dataTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", unique = true)
+    @Column(name = "status")
     private OrderStatusEnum status;
 
     @Embedded

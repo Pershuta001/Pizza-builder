@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.sevices;
 
+import com.example.pizzabuilder.convertors.OrderConvertor;
 import com.example.pizzabuilder.enums.OrderStatusEnum;
 import com.example.pizzabuilder.enums.RolesEnum;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
@@ -9,8 +10,9 @@ import com.example.pizzabuilder.repositories.OrderRepository;
 import com.example.pizzabuilder.repositories.UserRepository;
 import com.example.pizzabuilder.view.OrderView;
 import com.example.pizzabuilder.view.UserViewSignUp;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,6 +25,8 @@ import java.util.UUID;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private  final OrderConvertor orderConvertor;
+    private final  ObjectMapper objectMapper= new ObjectMapper();
 
     @Transactional
     public List<Order> getAll(){
@@ -49,14 +53,14 @@ public class OrderService {
     }
 
     @Transactional
-    Order updateOrder(OrderView orderView) throws EntityNotExistsException {
+    public Order updateOrder(OrderView orderView, String email) throws EntityNotExistsException {
         Optional<Order> optionalOrder = orderRepository.findByUuid(orderView.getUuid());
         if(!optionalOrder.isPresent())
             throw new EntityNotExistsException(UserEntity.class, orderView.getUuid());
         Order order = optionalOrder.get();
         //TODO how to count total price
         order.setTotalPrice(orderView.getTotalPrice());
-        order.setDataTime(orderView.getDataTime());
+        order.setDataTime(orderView.getDate());
         order.setStatus(orderView.getStatus());
         order.setAddress(orderView.getAddress());
         return orderRepository.saveAndFlush(order);
@@ -64,11 +68,24 @@ public class OrderService {
 
     }
 
-    public Order saveNewOrder(OrderView newOrder) {
-        Order order
-        UserEntity userEntity = userConvertor.convert(newUser);
-        userEntity.setRoleId(RolesEnum.USER.ordinal());
+    public Order saveNewOrder(OrderView newOrder, String email) {
+        Order order = orderConvertor.convert(newOrder);
+        order.setUserEntity(userRepository.findByEmail(email).get());
+        order.setStatus(OrderStatusEnum.IN_CART);
         return orderRepository.save(order);
+    }
+
+    @SneakyThrows
+    public String responseOrder(Order order){
+        String res = "{";
+        res += String.format("\"uuid\": \"%s\",", objectMapper.writeValueAsString(order.getUuid()));
+
+        res += String.format("\"status\": \"%s\",", objectMapper.writeValueAsString(order.getStatus()));
+        res += String.format("\"date\": \"%s\",", objectMapper.writeValueAsString(order.getDataTime()));
+        res += String.format("\"totalPrice\": \"%s\",", objectMapper.writeValueAsString(order.getTotalPrice()));
+        res += String.format("\"pizzaInOrder\": \"%s\",", objectMapper.writeValueAsString(order.getPizzaInOrders()));
+        res += "\"address\":"+objectMapper.writeValueAsString(order.getAddress())+"}";
+        return res;
     }
     //TODO exceptions timeFinding
     /*

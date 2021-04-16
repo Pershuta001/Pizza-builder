@@ -19,7 +19,7 @@ public class OrderView {
 
     private Double totalPrice;
 
-    private Date dataTime;
+    private Date date;
 
     private OrderStatusEnum status;
 

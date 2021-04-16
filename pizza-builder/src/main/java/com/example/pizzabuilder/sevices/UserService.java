@@ -37,6 +37,10 @@ public class UserService {
     public Optional<UserEntity> existByEmail(@NotNull final String email) {
         return userRepository.findByEmail(email);
     }
+    @Transactional
+    public Optional<UserEntity> findByUUID(@NotNull final UUID uuid) {
+        return userRepository.findByUuid(uuid);
+    }
 
     public UserEntity saveNewUser(UserViewSignUp newUser) {
         UserEntity userEntity = userConvertor.convert(newUser);
@@ -60,7 +64,7 @@ public class UserService {
     public UserEntity updateUser(UserViewSignUp userViewSignUp) throws Exception{
         Optional<UserEntity> userOptional = userRepository.findByEmail(userViewSignUp.getEmail());
         if(!userOptional.isPresent())
-            throw new EntityNotExistsException(UserEntity.class, userViewSignUp.getEmail());;
+            throw new EntityNotExistsException(UserEntity.class, userViewSignUp.getEmail());
         UserEntity user = userOptional.get();
         user.setName(userViewSignUp.getName());
         user.setPhone(userViewSignUp.getPhone());
