@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.model;
 
+import com.example.pizzabuilder.enums.OrderStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,8 +39,9 @@ public class Order {
     @Column(name = "date_time", nullable = false)
     private Date dataTime;
 
-    @Column(name = "status", nullable = false)
-    private Integer status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", unique = true)
+    private OrderStatusEnum status;
 
     @Embedded
     private Address address;
