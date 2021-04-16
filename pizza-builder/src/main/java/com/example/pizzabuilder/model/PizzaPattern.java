@@ -40,4 +40,8 @@ public class PizzaPattern {
     @OneToMany
     private List<PizzaInOrder> pizzaInOrders;
 
+    @Lob
+    @Column(name="picture")
+    private byte [] photo;
+
 }
