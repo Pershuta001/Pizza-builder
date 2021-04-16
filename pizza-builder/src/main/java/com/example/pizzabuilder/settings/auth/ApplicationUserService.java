@@ -40,7 +40,7 @@ public class ApplicationUserService implements UserDetailsService {
             throw new UsernameNotFoundException("User with login: " + login + " not found.");
         }
         user = userEntityOptional.get();
-        Set<SimpleGrantedAuthority> authorities = RolesEnum.values()[user.getRole()].getGrantedAuthorities();
+        Set<SimpleGrantedAuthority> authorities = RolesEnum.values()[user.getRoleId()].getGrantedAuthorities();
         return new User(user.getEmail(),
                 user.getHashed_password(),
                 true,
