@@ -19,7 +19,7 @@ public class IngredientConvertor {
     @SneakyThrows
     public Ingredient convert(IngredientView ingredientView) {
 
-        IngredientGroup group =  ingredientGroupService.getByUUID(ingredientView.getUuid());
+        IngredientGroup group =  ingredientGroupService.getByUUID(ingredientView.getGroupUuid());
 
         return Ingredient.builder()
                 .name(ingredientView.getName())
