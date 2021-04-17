@@ -22,5 +22,5 @@ public class PizzaPatternView {
     private Boolean confirmed;
     private UUID userEntityUUID;
     private List<IngredientView> ingredients;
-    private byte[] photo;
+    private String photoUrl;
 }

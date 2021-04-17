@@ -52,8 +52,7 @@ public class UserEntity {
     @Column(name = "hashed_password", nullable = false)
     private String hashed_password;
 
-    @Lob
-    @Column(name="photo")
-    private byte [] photo;
+    @Column(name="photoUrl")
+    private String photoUrl;
 
 }

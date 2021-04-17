@@ -24,7 +24,7 @@ public class PizzaPatternConvertor {
                 .confirmed(pizzaPatternView.getConfirmed())
                 .userEntityUUID(userRepository.findByUuid(pizzaPatternView.getUserEntityUUID()).get())
                 .ingredients(convert(pizzaPatternView.getIngredients()))
-                .photo(pizzaPatternView.getPhoto())
+                .photoUrl(pizzaPatternView.getPhotoUrl())
                 .uuid(pizzaPatternView.getUuid())
                 .build();
     }

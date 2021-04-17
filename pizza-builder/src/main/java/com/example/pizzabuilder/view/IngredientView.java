@@ -19,5 +19,5 @@ public class IngredientView {
     private Boolean spicy;
     private Boolean vegetarian;
     private Boolean vegan;
-    private byte[] photo;
+    private String photoUrl;
 }

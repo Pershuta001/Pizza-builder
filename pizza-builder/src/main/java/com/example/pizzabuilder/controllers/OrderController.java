@@ -24,8 +24,8 @@ public class OrderController {
     private final PizzaInOrderService pizzaInOrderService;
 
     @ResponseBody
-    @PreAuthorize("hasAuthority('ORDER_CREATE')")
     @PostMapping("/create-cart")
+    @PreAuthorize("hasAuthority('order:create')")
     public ResponseEntity<String> addNewOrderToCart(
             @RequestBody OrderView orderView
             ){
@@ -36,8 +36,8 @@ public class OrderController {
                 .body(orderService.responseOrder(order));
     }
     @ResponseBody
-    @PreAuthorize("hasAuthority('ORDER_UPDATE')")
     @PutMapping("/update-order")
+    @PreAuthorize("hasAuthority('order:update')")
     public ResponseEntity<String> updateOrder(
             @RequestBody OrderView orderView
     ) throws EntityNotExistsException {
@@ -48,9 +48,10 @@ public class OrderController {
                 .ok()
                 .body(orderService.responseOrder(order));
     }
+
     @ResponseBody
-    @PreAuthorize("hasAuthority('ORDER_CREATE')")
     @PostMapping("/create-pizza-in-order")
+    @PreAuthorize("hasAuthority('pizza_in_order:create')")
     public ResponseEntity<String> addNewPizzaInOrder(
             @RequestBody PizzaInOrderView pizzaInOrderView
             ){
@@ -61,8 +62,8 @@ public class OrderController {
     }
 
     @ResponseBody
-    @PreAuthorize("hasAuthority('ORDER_UPDATE')")
     @PutMapping("/update-pizza-in-order")
+    @PreAuthorize("hasAuthority('pizza_in_order:update')")
     public ResponseEntity<String> updatePizzaInOrder(
             @RequestBody PizzaInOrderView pizzaInOrderView
     ) throws EntityNotExistsException {
@@ -72,12 +73,11 @@ public class OrderController {
                 .body(pizzaInOrderService.responsePizzaInOrder(pizzaInOrder));
     }
 
-
-    @PreAuthorize("hasAuthority('ORDER_UPDATE')")
-    @PutMapping("/delete-pizza-in-order")
+    @DeleteMapping("/delete-pizza-in-order")
+    @PreAuthorize("hasAuthority('pizza_in_order:delete')")
     public ResponseEntity<String> deletePizzaInOrder(
             @RequestBody PizzaInOrderView pizzaInOrderView
-    ) throws EntityNotExistsException {
+    ) {
         pizzaInOrderService.delete(pizzaInOrderView);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

@@ -19,8 +19,9 @@ public class IngredientConvertor {
                 .name(ingredientView.getName())
                 .spicy(ingredientView.getSpicy())
                 .vegetarian(ingredientView.getVegetarian())
+                .vegan(ingredientView.getVegan())
                 .price(ingredientView.getPrice())
-                .photo(ingredientView.getPhoto())
+                .photoUrl(ingredientView.getPhotoUrl())
                 .uuid(ingredientView.getUuid())
                 .build();
 

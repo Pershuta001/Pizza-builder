@@ -17,8 +17,8 @@ public class IngredientsController {
     private final IngredientService ingredientService;
 
     @ResponseBody
-    @PreAuthorize("hasAuthority('ingredient:read')")
     @GetMapping("/products/all")
+    @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<Ingredient>> getAllIngredients(
     ){
         return ResponseEntity

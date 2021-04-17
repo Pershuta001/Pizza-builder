@@ -33,15 +33,14 @@ public class PizzaPattern {
     @Column(name="confirmed", nullable = false)
     private Boolean confirmed;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_uuid")
     private UserEntity userEntityUUID;
 
     @OneToMany
     private List<Ingredient> ingredients;
 
-    @Lob
-    @Column(name="picture")
-    private byte [] photo;
+    @Column(name="photoUrl")
+    private String photoUrl;
 
 }

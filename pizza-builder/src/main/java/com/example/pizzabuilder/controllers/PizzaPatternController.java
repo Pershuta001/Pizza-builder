@@ -17,8 +17,8 @@ public class PizzaPatternController {
     private final PizzaPatternService patternService;
 
     @ResponseBody
-    @PreAuthorize("hasAuthority('PIZZA_PATTERN_READ')")
-    @GetMapping("/all-patterns")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    @GetMapping("/patterns/all")
     public ResponseEntity<List<PizzaPattern>> getAllPatterns(
     ){
 
@@ -28,8 +28,8 @@ public class PizzaPatternController {
     }
 
     @ResponseBody
-    @PreAuthorize("hasAuthority('PIZZA_PATTERN_CREATE')")
-    @PostMapping("/add-pattern")
+    @PreAuthorize("hasAuthority('pizza_pattern:create')")
+    @PostMapping("/patterns/add")
     public ResponseEntity<PizzaPattern> saveNewPattern(
             @RequestBody PizzaPatternView pizzaPattern
     ){
