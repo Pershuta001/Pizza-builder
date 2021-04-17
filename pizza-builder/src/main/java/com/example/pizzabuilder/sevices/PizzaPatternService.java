@@ -3,6 +3,7 @@ package com.example.pizzabuilder.sevices;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.model.UserEntity;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
+import com.example.pizzabuilder.view.PizzaPatternView;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -41,10 +42,15 @@ public class PizzaPatternService {
     }
 
     @Transactional
-    public PizzaPattern savePizzaPattern(String name, Boolean confirmed, UserEntity user, byte [] photo){
+    public PizzaPattern savePizzaPattern(PizzaPatternView pizzaPatternView){
         return pizzaPatternRepository.save(PizzaPattern.builder()
-                .name(name).confirmed(confirmed).userEntityUUID(user).photo(photo).build());
+                .name(pizzaPatternView.getName())
+                .confirmed(pizzaPatternView.getConfirmed())
+                .userEntityUUID(pizzaPatternView.getUserEntityUUID())
+                .pizzaInOrders(pizzaPatternView.getPizzaInOrders())
+                .photo(pizzaPatternView.getPhoto()).build());
     }
+
     @Transactional
     public PizzaPattern updatePizzaPattern(PizzaPattern pizzaPattern){
         return pizzaPatternRepository.saveAndFlush(pizzaPattern);
