@@ -22,7 +22,7 @@ import java.util.UUID;
 public class IngredientGroupService {
     private final IngredientGroupRepository ingredientGroupRepository;
     private final IngredientGroupConvertor ingredientGroupConvertor;
-    private final IngredientConvertor ingredientConvertor;
+
     @Transactional
     public List<IngredientGroup> getAll(){
         return ingredientGroupRepository.findAll();
@@ -55,12 +55,8 @@ public class IngredientGroupService {
 
     //TODO ingredientValidator
     @Transactional
-    public IngredientGroup addIngredients(UUID ingredientGroupUUID, List<IngredientView> ingredientViews) throws Exception{
+    public IngredientGroup addIngredients(UUID ingredientGroupUUID, List<Ingredient> ingredients) throws Exception{
         Optional<IngredientGroup> ingredientGroupOptional = ingredientGroupRepository.findById(ingredientGroupUUID);
-        List<Ingredient> ingredients = new ArrayList<>();
-        for(IngredientView view:ingredientViews){
-            ingredients.add(ingredientConvertor.convert(view));
-        }
         if(!ingredientGroupOptional.isPresent())
             throw new EntityNotExistsException(IngredientGroup.class, ingredientGroupUUID);
         for (Ingredient ingredient:ingredients) {

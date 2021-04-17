@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.controllers;
 
+import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.IngredientGroup;
 import com.example.pizzabuilder.sevices.IngredientGroupService;
 import com.example.pizzabuilder.view.IngredientGroupView;
@@ -22,7 +23,7 @@ public class IngredientsGroupController {
     @GetMapping("/products/group/all")
     @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<IngredientGroup>> getAllGroups(
-    ){
+    ) {
         return ResponseEntity
                 .ok()
                 .body(ingredientGroupService.getAll());
@@ -43,12 +44,12 @@ public class IngredientsGroupController {
     @PostMapping("/products/group/addIngredients/{groupUUID}")
     @PreAuthorize("hasAuthority('ingredient:create')")
     public ResponseEntity<IngredientGroup> addIngredientsToGroup(
-            @RequestBody List<IngredientView> ingredientView,
+            @RequestBody List<Ingredient> ingredient,
             @PathVariable UUID groupUUID
     ) throws Exception {
         return ResponseEntity
                 .ok()
-                .body(ingredientGroupService.addIngredients(groupUUID,ingredientView));
+                .body(ingredientGroupService.addIngredients(groupUUID, ingredient));
     }
 
 }
