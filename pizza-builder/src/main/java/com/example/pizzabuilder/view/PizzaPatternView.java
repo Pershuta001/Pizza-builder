@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.view;
 
+import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.PizzaInOrder;
 import com.example.pizzabuilder.model.UserEntity;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class PizzaPatternView {
     private UUID uuid;
     private String name;
     private Boolean confirmed;
-    private UserEntity userEntityUUID;
-    private List<PizzaInOrder> pizzaInOrders;
+    private UUID userEntityUUID;
+    private List<IngredientView> ingredients;
     private byte[] photo;
 }

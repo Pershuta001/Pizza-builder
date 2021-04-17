@@ -24,7 +24,7 @@ public class Ingredient {
     private UUID uuid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_uuid", nullable = false)
+    @JoinColumn(name = "group_uuid")
     private IngredientGroup groupUuid;
 
     @Column(name = "name", nullable = false)

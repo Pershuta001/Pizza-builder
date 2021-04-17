@@ -38,7 +38,7 @@ public class PizzaPattern {
     private UserEntity userEntityUUID;
 
     @OneToMany
-    private List<PizzaInOrder> pizzaInOrders;
+    private List<Ingredient> ingredients;
 
     @Lob
     @Column(name="picture")

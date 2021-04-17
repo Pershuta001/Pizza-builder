@@ -1,10 +1,12 @@
 package com.example.pizzabuilder.sevices;
 
+import com.example.pizzabuilder.convertors.PizzaPatternConvertor;
 import com.example.pizzabuilder.model.PizzaPattern;
-import com.example.pizzabuilder.model.UserEntity;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
 import com.example.pizzabuilder.view.PizzaPatternView;
+import com.sun.javaws.exceptions.ExitException;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PizzaPatternService {
     private final PizzaPatternRepository pizzaPatternRepository;
+    private final PizzaPatternConvertor pizzaPatternConvertor;
 
     @Transactional
     public List<PizzaPattern> getAll(){
@@ -41,14 +44,13 @@ public class PizzaPatternService {
         return pizzaPattern.get();
     }
 
+    @SneakyThrows
     @Transactional
     public PizzaPattern savePizzaPattern(PizzaPatternView pizzaPatternView){
-        return pizzaPatternRepository.save(PizzaPattern.builder()
-                .name(pizzaPatternView.getName())
-                .confirmed(pizzaPatternView.getConfirmed())
-                .userEntityUUID(pizzaPatternView.getUserEntityUUID())
-                .pizzaInOrders(pizzaPatternView.getPizzaInOrders())
-                .photo(pizzaPatternView.getPhoto()).build());
+        if(pizzaPatternRepository.getByName(pizzaPatternView.getName()).isPresent()){
+            throw new Exception("Pattern with such name already exists");
+        }
+        return pizzaPatternRepository.save(pizzaPatternConvertor.convert(pizzaPatternView));
     }
 
     @Transactional
