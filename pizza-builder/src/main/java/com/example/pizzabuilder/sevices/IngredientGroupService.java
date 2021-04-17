@@ -70,4 +70,9 @@ public class IngredientGroupService {
         return ingredientGroupRepository.saveAndFlush(ingredientGroup);
     }
 
+    @Transactional
+    public IngredientGroup getByUUID(UUID uuid){
+        return ingredientGroupRepository.findByUuid(uuid);
+    }
+
 }
