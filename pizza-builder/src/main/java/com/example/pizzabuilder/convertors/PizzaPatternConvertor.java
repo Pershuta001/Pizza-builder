@@ -1,11 +1,9 @@
 package com.example.pizzabuilder.convertors;
 
-import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.IngredientInPizza;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.repositories.UserRepository;
 import com.example.pizzabuilder.view.IngredientInPizzaView;
-import com.example.pizzabuilder.view.IngredientView;
 import com.example.pizzabuilder.view.PizzaPatternView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

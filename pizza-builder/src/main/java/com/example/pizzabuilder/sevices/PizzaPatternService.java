@@ -1,9 +1,11 @@
 package com.example.pizzabuilder.sevices;
 
 import com.example.pizzabuilder.convertors.PizzaPatternConvertor;
+import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.IngredientInPizza;
 import com.example.pizzabuilder.model.PizzaInOrder;
 import com.example.pizzabuilder.model.PizzaPattern;
+import com.example.pizzabuilder.repositories.IngredientRepository;
 import com.example.pizzabuilder.repositories.IngredientsInPizzaRepository;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
 import com.example.pizzabuilder.view.PizzaPatternView;
@@ -22,10 +24,17 @@ public class PizzaPatternService {
     private final PizzaPatternRepository pizzaPatternRepository;
     private final PizzaPatternConvertor pizzaPatternConvertor;
     private final IngredientsInPizzaRepository ingredientsInPizzaRepository;
+    private final IngredientRepository ingredientRepository;
 
     @Transactional
     public List<PizzaPattern> getAll(){
-        return pizzaPatternRepository.findAll();
+        List<PizzaPattern> pizzaPatterns = pizzaPatternRepository.findAll();
+        for(PizzaPattern p : pizzaPatterns)
+            for(IngredientInPizza i:p.getIngredients()) {
+                System.out.println(i.getIngredient());
+            }
+
+        return pizzaPatterns;
     }
     @Transactional PizzaPattern save(PizzaPattern pizzaPattern){
         return pizzaPatternRepository.save(pizzaPattern);
@@ -53,10 +62,12 @@ public class PizzaPatternService {
         if(pizzaPatternRepository.getByName(pizzaPatternView.getName()).isPresent()){
             throw new Exception("Pattern with such name already exists");
         }
-        PizzaPattern pizzaPattern = pizzaPatternConvertor.convert(pizzaPatternView);
-        pizzaPattern=pizzaPatternRepository.save(pizzaPatternConvertor.convert(pizzaPatternView));
+        PizzaPattern pizzaPattern=pizzaPatternRepository.save(pizzaPatternConvertor.convert(pizzaPatternView));
         for(IngredientInPizza i:pizzaPattern.getIngredients()){
             i.getId().setPatternUuid(pizzaPattern.getUuid());
+            i.setPizzaPattern(pizzaPattern);
+
+            i.setIngredient(ingredientRepository.findByUuid(i.getId().getIngredientUuid()).get());
             ingredientsInPizzaRepository.save(i);}
         return pizzaPattern;
     }
