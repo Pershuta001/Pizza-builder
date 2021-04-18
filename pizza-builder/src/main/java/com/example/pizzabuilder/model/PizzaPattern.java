@@ -38,7 +38,7 @@ public class PizzaPattern {
     private UserEntity userEntityUUID;
 
     @OneToMany
-    private List<Ingredient> ingredients;
+    private List<IngredientInPizza> ingredients;
 
     @Column(name="photoUrl")
     private String photoUrl;

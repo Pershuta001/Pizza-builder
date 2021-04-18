@@ -15,4 +15,5 @@ public class IngredientGroupView {
 
     private UUID uuid;
     private String name;
+    private String label;
 }

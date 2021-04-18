@@ -1,7 +1,10 @@
 package com.example.pizzabuilder.sevices;
 
 import com.example.pizzabuilder.convertors.PizzaPatternConvertor;
+import com.example.pizzabuilder.model.IngredientInPizza;
+import com.example.pizzabuilder.model.PizzaInOrder;
 import com.example.pizzabuilder.model.PizzaPattern;
+import com.example.pizzabuilder.repositories.IngredientsInPizzaRepository;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
 import com.example.pizzabuilder.view.PizzaPatternView;
 import lombok.AllArgsConstructor;
@@ -18,6 +21,7 @@ import java.util.UUID;
 public class PizzaPatternService {
     private final PizzaPatternRepository pizzaPatternRepository;
     private final PizzaPatternConvertor pizzaPatternConvertor;
+    private final IngredientsInPizzaRepository ingredientsInPizzaRepository;
 
     @Transactional
     public List<PizzaPattern> getAll(){
@@ -49,7 +53,12 @@ public class PizzaPatternService {
         if(pizzaPatternRepository.getByName(pizzaPatternView.getName()).isPresent()){
             throw new Exception("Pattern with such name already exists");
         }
-        return pizzaPatternRepository.save(pizzaPatternConvertor.convert(pizzaPatternView));
+        PizzaPattern pizzaPattern = pizzaPatternConvertor.convert(pizzaPatternView);
+        pizzaPattern=pizzaPatternRepository.save(pizzaPatternConvertor.convert(pizzaPatternView));
+        for(IngredientInPizza i:pizzaPattern.getIngredients()){
+            i.getId().setPatternUuid(pizzaPattern.getUuid());
+            ingredientsInPizzaRepository.save(i);}
+        return pizzaPattern;
     }
 
     @Transactional

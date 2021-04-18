@@ -21,4 +21,5 @@ public class IngredientView {
     private Boolean vegan;
     private String photoUrl;
     private String groupName;
+    private String groupLabel;
 }

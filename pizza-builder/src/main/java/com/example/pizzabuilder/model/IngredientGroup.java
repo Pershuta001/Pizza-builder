@@ -31,6 +31,9 @@ public class IngredientGroup {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "label", nullable = false)
+    private String label;
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Ingredient> ingredients;
 }

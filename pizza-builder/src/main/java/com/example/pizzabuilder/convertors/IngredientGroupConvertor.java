@@ -11,6 +11,7 @@ public class IngredientGroupConvertor {
         return IngredientGroup.builder()
                 .name(ingredientGroupView.getName())
                 .uuid(ingredientGroupView.getUuid())
+                .label(ingredientGroupView.getLabel())
                 .build();
     }
 

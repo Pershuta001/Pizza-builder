@@ -18,8 +18,7 @@ public class IngredientConvertor {
 
     @SneakyThrows
     public Ingredient convert(IngredientView ingredientView) {
-
-        IngredientGroup group =  ingredientGroupService.getByUUID(ingredientView.getGroupUuid());
+        IngredientGroup group = ingredientView.getGroupUuid()!=null ? ingredientGroupService.getByUUID(ingredientView.getGroupUuid()):null;
 
         return Ingredient.builder()
                 .name(ingredientView.getName())
@@ -46,6 +45,7 @@ public class IngredientConvertor {
                 .uuid(ingredient.getUuid())
                 .groupUuid(ingredient.getGroupUuid().getUuid())
                 .groupName(ingredient.getGroupUuid().getName())
+                .groupLabel(ingredient.getGroupUuid().getLabel())
                 .build();
 
     }

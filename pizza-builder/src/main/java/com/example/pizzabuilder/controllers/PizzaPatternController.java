@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.controllers;
 
+import com.example.pizzabuilder.convertors.PizzaPatternConvertor;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.sevices.PizzaPatternService;
 import com.example.pizzabuilder.view.PizzaPatternView;
@@ -15,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PizzaPatternController {
     private final PizzaPatternService patternService;
+    private final PizzaPatternConvertor pizzaPatternConvertor;
 
     @ResponseBody
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
@@ -30,11 +32,11 @@ public class PizzaPatternController {
     @ResponseBody
     @PreAuthorize("hasAuthority('pizza_pattern:create')")
     @PostMapping("/patterns/add")
-    public ResponseEntity<PizzaPattern> saveNewPattern(
+    public ResponseEntity<PizzaPatternView> saveNewPattern(
             @RequestBody PizzaPatternView pizzaPattern
     ){
         return ResponseEntity
                 .ok()
-                .body(patternService.savePizzaPattern(pizzaPattern));
+                .body(pizzaPatternConvertor.convert(patternService.savePizzaPattern(pizzaPattern)));
     }
 }
