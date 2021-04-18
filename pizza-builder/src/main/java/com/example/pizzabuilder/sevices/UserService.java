@@ -51,7 +51,7 @@ public class UserService {
     public UserEntity setAddress(UUID userId, Address address) throws Exception{
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         if(!userOptional.isPresent())
-            throw new Exception("e");
+            throw new Exception("No user with id "+ userId.toString());
         UserEntity user = userOptional.get();
         user.setAddress(address);
         return userRepository.saveAndFlush(user);
@@ -75,7 +75,7 @@ public class UserService {
     public UserEntity setPassword(UUID uuid, String hashed_password) throws Exception{
         Optional<UserEntity> userOptional = userRepository.findById(uuid);
         if(!userOptional.isPresent())
-            throw new Exception("e");
+            throw new Exception("No user with id "+ uuid.toString());
         UserEntity user = userOptional.get();
         user.setHashed_password(hashed_password);
         return userRepository.saveAndFlush(user);
@@ -85,7 +85,7 @@ public class UserService {
     public UserEntity addPizzaPattern(UUID uuid, PizzaPattern pizzaPattern) throws Exception{
         Optional<UserEntity> userOptional = userRepository.findById(uuid);
         if(!userOptional.isPresent())
-            throw new Exception("e");
+            throw new Exception("No user with id "+ uuid.toString());
         UserEntity user = userOptional.get();
         List<PizzaPattern> pizzaPatterns = user.getPizzaPatterns();
         pizzaPatterns.add(pizzaPattern);

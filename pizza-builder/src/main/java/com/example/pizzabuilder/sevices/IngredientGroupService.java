@@ -41,7 +41,7 @@ public class IngredientGroupService {
     public IngredientGroup save(String name, List<Ingredient> ingredients) throws Exception{
         List<IngredientGroup> ingredientGroup = ingredientGroupRepository.findByName(name);
         if(ingredientGroup.size()>0)
-            throw new Exception("e");
+            throw new Exception("Ingredient group with name  "+ name + " is exist");
         return ingredientGroupRepository.save(IngredientGroup.builder().name(name).ingredients(ingredients).build());
     }
 
@@ -49,7 +49,7 @@ public class IngredientGroupService {
     public IngredientGroup save(IngredientGroupView view) throws Exception{
         List<IngredientGroup> ingredientGroup = ingredientGroupRepository.findByName(view.getName());
         if(ingredientGroup.size()>0)
-            throw new Exception("e");
+            throw new Exception("Ingredient group with name  "+ view.getName() + " is exist");
         return ingredientGroupRepository.save(ingredientGroupConvertor.convert(view));
     }
 
@@ -61,7 +61,7 @@ public class IngredientGroupService {
             throw new EntityNotExistsException(IngredientGroup.class, ingredientGroupUUID);
         for (Ingredient ingredient:ingredients) {
             if(ingredient.getGroupUuid()!=null)
-                throw new Exception("e");
+                throw new Exception("Ingredient "+ingredient.getName()+" in another group");
         }
         IngredientGroup ingredientGroup = ingredientGroupOptional.get();
         List<Ingredient> ingredients1= ingredientGroup.getIngredients();

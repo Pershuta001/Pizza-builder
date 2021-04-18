@@ -17,7 +17,7 @@ public class IngredientInPizzaService {
     public IngredientInPizza getByID(IngredientInPizzaId id) throws Exception{
         Optional<IngredientInPizza> ingredientInPizzaOptional = ingredientsInPizzaRepository.findById(id);
         if(!ingredientInPizzaOptional.isPresent())
-            throw new Exception("e");
+            throw new Exception("No ingredient in pizza with id "+ id.toString());
         return ingredientInPizzaOptional.get();
     }
     //TODO exception
@@ -25,7 +25,7 @@ public class IngredientInPizzaService {
     public IngredientInPizza setQuantity(IngredientInPizzaId ingredientInPizzaId, Integer quantity) throws Exception{
         Optional<IngredientInPizza> ingredientInPizzaOptional = ingredientsInPizzaRepository.findById(ingredientInPizzaId);
         if(!ingredientInPizzaOptional.isPresent())
-            throw new Exception("e");
+            throw new Exception("No ingredient in pizza with id "+ ingredientInPizzaId.toString());
         IngredientInPizza ingredientInPizza = ingredientInPizzaOptional.get();
         ingredientInPizza.setQuantity(quantity);
         return ingredientsInPizzaRepository.saveAndFlush(ingredientInPizza);

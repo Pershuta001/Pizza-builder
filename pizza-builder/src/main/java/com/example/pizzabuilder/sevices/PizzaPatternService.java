@@ -4,7 +4,6 @@ import com.example.pizzabuilder.convertors.PizzaPatternConvertor;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
 import com.example.pizzabuilder.view.PizzaPatternView;
-import com.sun.javaws.exceptions.ExitException;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class PizzaPatternService {
     public PizzaPattern setConfirmed(UUID patternId, Boolean confirmedStatus) throws Exception{
         Optional<PizzaPattern> pizzaPattern = pizzaPatternRepository.findById(patternId);
         if(!pizzaPattern.isPresent())
-            throw new Exception("e");
+            throw new Exception("No pizza pattern with id "+ patternId.toString());
         PizzaPattern pattern = pizzaPattern.get();
         pattern.setConfirmed(confirmedStatus);
         return pizzaPatternRepository.saveAndFlush(pattern);
@@ -40,7 +39,7 @@ public class PizzaPatternService {
     public  PizzaPattern getById(UUID uuid) throws Exception{
         Optional<PizzaPattern> pizzaPattern = pizzaPatternRepository.findById(uuid);
         if(!pizzaPattern.isPresent())
-            throw new Exception("e");
+            throw new Exception("No pizza pattern with id "+ uuid.toString());
         return pizzaPattern.get();
     }
 

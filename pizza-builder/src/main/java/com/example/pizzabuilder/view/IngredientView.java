@@ -20,4 +20,5 @@ public class IngredientView {
     private Boolean vegetarian;
     private Boolean vegan;
     private String photoUrl;
+    private String groupName;
 }

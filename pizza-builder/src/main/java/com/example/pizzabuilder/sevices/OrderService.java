@@ -36,7 +36,7 @@ public class OrderService {
     public Order setStatus(UUID orderId, OrderStatusEnum status) throws Exception{
         Optional<Order> orderOptional = orderRepository.findById(orderId);
         if(!orderOptional.isPresent())
-            throw new Exception("e");
+            throw new Exception("No order with id "+ orderId.toString());
         Order order = orderOptional.get();
         order.setStatus(status);
         return orderRepository.saveAndFlush(order);

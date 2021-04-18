@@ -33,4 +33,20 @@ public class IngredientConvertor {
                 .build();
 
     }
+    @SneakyThrows
+    public IngredientView convert(Ingredient ingredient) {
+
+        return IngredientView.builder()
+                .name(ingredient.getName())
+                .spicy(ingredient.getSpicy())
+                .vegetarian(ingredient.getVegetarian())
+                .vegan(ingredient.getVegan())
+                .price(ingredient.getPrice())
+                .photoUrl(ingredient.getPhotoUrl())
+                .uuid(ingredient.getUuid())
+                .groupUuid(ingredient.getGroupUuid().getUuid())
+                .groupName(ingredient.getGroupUuid().getName())
+                .build();
+
+    }
 }

@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,16 +19,21 @@ public class IngredientService {
     private final IngredientRepository ingredientRepository;
     private final IngredientConvertor ingredientConvertor;
 
+
     @Transactional
-    public List<Ingredient> getAll(){
-        return ingredientRepository.findAll();
+    public List<IngredientView> getAll(){
+
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+        List<IngredientView> ingredientViews = new ArrayList<>();
+        for(Ingredient i : ingredients)
+            ingredientViews.add(ingredientConvertor.convert(i));
+        return ingredientViews;
     }
-    //TODO exception validator
 
     @Transactional
     public Ingredient save(String name, Boolean vegan, Boolean vegetarian, Boolean spicy) throws Exception{
         if(ingredientRepository.findByName(name).size()>0)
-            throw new Exception("e");
+            throw new Exception("Ingredient with name "+name+ " is exist");
         return ingredientRepository.save(Ingredient.builder().name(name).vegan(vegan).spicy(spicy).vegetarian(vegetarian).build());
     }
 
@@ -35,7 +41,7 @@ public class IngredientService {
     @Transactional
     public Ingredient save(IngredientView ingredientView){
         if(ingredientRepository.findByName(ingredientView.getName()).size()>0)
-            throw new Exception("e");
+            throw new Exception("Ingredient with name "+ingredientView.getName()+ " is exist");
         return ingredientRepository.save(ingredientConvertor.convert(ingredientView));
     }
     /*

@@ -19,7 +19,7 @@ public class IngredientsController {
     @ResponseBody
     @GetMapping("/products/all")
     @PreAuthorize("hasAuthority('ingredient:read')")
-    public ResponseEntity<List<Ingredient>> getAllIngredients(
+    public ResponseEntity<List<IngredientView>> getAllIngredients(
     ){
         return ResponseEntity
                 .ok()

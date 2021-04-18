@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface IngredientRepository extends JpaRepository<Ingredient, UUID> {
     List<Ingredient> findByName(String name);
 
+
 }

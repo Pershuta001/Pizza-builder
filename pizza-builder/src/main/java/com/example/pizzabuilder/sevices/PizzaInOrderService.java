@@ -32,7 +32,7 @@ public class PizzaInOrderService {
     public PizzaInOrder setQuantity(PizzaInOrderId inOrderId, Integer quantity) throws Exception{
         Optional<PizzaInOrder> pizzaInOrderOptional = pizzaInOrderRepository.findById(inOrderId);
         if(!pizzaInOrderOptional.isPresent())
-            throw new Exception("e");
+            throw new Exception("No pizza in order with id "+ inOrderId.toString());
         PizzaInOrder pizzaInOrder = pizzaInOrderOptional.get();
         pizzaInOrder.setQuantity(quantity);
         return pizzaInOrderRepository.saveAndFlush(pizzaInOrder);
