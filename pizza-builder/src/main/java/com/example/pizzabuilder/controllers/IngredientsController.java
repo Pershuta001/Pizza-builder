@@ -1,6 +1,8 @@
 package com.example.pizzabuilder.controllers;
 
+import com.example.pizzabuilder.convertors.IngredientConvertor;
 import com.example.pizzabuilder.model.Ingredient;
+import com.example.pizzabuilder.sevices.IngredientGroupService;
 import com.example.pizzabuilder.sevices.IngredientService;
 import com.example.pizzabuilder.view.IngredientView;
 import lombok.AllArgsConstructor;
@@ -15,6 +17,8 @@ import java.util.List;
 public class IngredientsController {
 
     private final IngredientService ingredientService;
+    private final IngredientGroupService ingredientGroupService;
+    private final IngredientConvertor ingredientConvertor;
 
     @ResponseBody
     @GetMapping("/products/all")
@@ -29,11 +33,13 @@ public class IngredientsController {
     @ResponseBody
     @PostMapping("/products/add")
     @PreAuthorize("hasAuthority('ingredient:create')")
-    public ResponseEntity<Ingredient> addIngredient(
+    public ResponseEntity<IngredientView> addIngredient(
             @RequestBody IngredientView ingredientView
-            ){
+            ) throws Exception {
+        Ingredient ingredient = ingredientService.save(ingredientView);
+        ingredientGroupService.addIngredient(ingredient.getGroupUuid().getUuid(), ingredient);
         return ResponseEntity
                 .ok()
-                .body(ingredientService.save(ingredientView));
+                .body(ingredientConvertor.convert(ingredient));
     }
 }

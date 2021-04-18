@@ -53,7 +53,6 @@ public class IngredientGroupService {
         return ingredientGroupRepository.save(ingredientGroupConvertor.convert(view));
     }
 
-    //TODO ingredientValidator
     @Transactional
     public IngredientGroup addIngredients(UUID ingredientGroupUUID, List<Ingredient> ingredients) throws Exception{
         Optional<IngredientGroup> ingredientGroupOptional = ingredientGroupRepository.findById(ingredientGroupUUID);
@@ -67,6 +66,19 @@ public class IngredientGroupService {
         List<Ingredient> ingredients1= ingredientGroup.getIngredients();
         ingredients1.addAll(ingredients);
         ingredientGroup.setIngredients(ingredients1);
+        return ingredientGroupRepository.saveAndFlush(ingredientGroup);
+    }
+    @Transactional
+    public IngredientGroup addIngredient(UUID ingredientGroupUUID, Ingredient ingredient) throws Exception{
+        Optional<IngredientGroup> ingredientGroupOptional = ingredientGroupRepository.findById(ingredientGroupUUID);
+        if(!ingredientGroupOptional.isPresent())
+            throw new EntityNotExistsException(IngredientGroup.class, ingredientGroupUUID);
+
+        if(ingredient.getGroupUuid()!=null&&ingredient.getGroupUuid().getUuid()!=ingredientGroupUUID)
+            throw new Exception("Ingredient "+ingredient.getName()+" in another group");
+
+        IngredientGroup ingredientGroup = ingredientGroupOptional.get();
+        ingredientGroup.getIngredients().add(ingredient);
         return ingredientGroupRepository.saveAndFlush(ingredientGroup);
     }
 
