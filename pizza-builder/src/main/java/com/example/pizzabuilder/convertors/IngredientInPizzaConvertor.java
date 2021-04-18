@@ -15,11 +15,9 @@ public class IngredientInPizzaConvertor {
     public IngredientInPizza convert(IngredientInPizzaView ingredientView) {
 
         return IngredientInPizza.builder()
-                .ingredient(ingredientConvertor.convert(ingredientView.getIngredient()))
                 .quantity(ingredientView.getQuantity())
                 .id(IngredientInPizzaId.builder()
-                        .patternUuid(ingredientView.getPatternUuid())
-                        .ingredientUuid(ingredientView.getIngredient().getUuid())
+                        .ingredientUuid(ingredientView.getIngredientUuid())
                         .build()
                 )
                 .build();
@@ -29,9 +27,7 @@ public class IngredientInPizzaConvertor {
     public IngredientInPizzaView convert(IngredientInPizza ingredientView) {
 
         return IngredientInPizzaView.builder()
-                .ingredient(ingredientConvertor.convert(ingredientView.getIngredient()))
                 .ingredientUuid(ingredientView.getId().getIngredientUuid())
-                .patternUuid(ingredientView.getId().getPatternUuid())
                 .quantity(ingredientView.getQuantity())
                 .build();
 

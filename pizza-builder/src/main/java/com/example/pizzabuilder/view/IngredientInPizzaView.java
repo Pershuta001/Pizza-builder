@@ -12,8 +12,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class IngredientInPizzaView {
-    private IngredientView ingredient;
     private Integer quantity;
-    private UUID patternUuid;
     private UUID ingredientUuid;
 }

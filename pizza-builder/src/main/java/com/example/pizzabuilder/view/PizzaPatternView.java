@@ -17,10 +17,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class PizzaPatternView {
-
     private UUID uuid;
     private String name;
-    private Boolean confirmed;
     private UUID userEntityUUID;
     private List<IngredientInPizzaView> ingredients;
     private String photoUrl;

@@ -21,7 +21,6 @@ public class PizzaPatternConvertor {
     public PizzaPattern convert(PizzaPatternView pizzaPatternView){
         return PizzaPattern.builder()
                 .name(pizzaPatternView.getName())
-                .confirmed(pizzaPatternView.getConfirmed())
                 .userEntityUUID(userRepository.findByUuid(pizzaPatternView.getUserEntityUUID()).get())
                 .ingredients(convert(pizzaPatternView.getIngredients()))
                 .photoUrl(pizzaPatternView.getPhotoUrl())
@@ -37,7 +36,6 @@ public class PizzaPatternConvertor {
     }
     public PizzaPatternView convert(PizzaPattern pizzaPattern){
         return PizzaPatternView.builder()
-                .confirmed(pizzaPattern.getConfirmed())
                 .ingredients(convertToViews(pizzaPattern.getIngredients()))
                 .name(pizzaPattern.getName())
                 .photoUrl(pizzaPattern.getPhotoUrl())

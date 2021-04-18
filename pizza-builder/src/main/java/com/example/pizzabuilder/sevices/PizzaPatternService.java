@@ -28,13 +28,7 @@ public class PizzaPatternService {
 
     @Transactional
     public List<PizzaPattern> getAll(){
-        List<PizzaPattern> pizzaPatterns = pizzaPatternRepository.findAll();
-        for(PizzaPattern p : pizzaPatterns)
-            for(IngredientInPizza i:p.getIngredients()) {
-                System.out.println(i.getIngredient());
-            }
-
-        return pizzaPatterns;
+        return pizzaPatternRepository.findAll();
     }
     @Transactional PizzaPattern save(PizzaPattern pizzaPattern){
         return pizzaPatternRepository.save(pizzaPattern);
@@ -62,7 +56,9 @@ public class PizzaPatternService {
         if(pizzaPatternRepository.getByName(pizzaPatternView.getName()).isPresent()){
             throw new Exception("Pattern with such name already exists");
         }
-        PizzaPattern pizzaPattern=pizzaPatternRepository.save(pizzaPatternConvertor.convert(pizzaPatternView));
+        PizzaPattern converted = pizzaPatternConvertor.convert(pizzaPatternView);
+        converted.setConfirmed(false);
+        PizzaPattern pizzaPattern=pizzaPatternRepository.save(converted);
         for(IngredientInPizza i:pizzaPattern.getIngredients()){
             i.getId().setPatternUuid(pizzaPattern.getUuid());
             i.setPizzaPattern(pizzaPattern);
