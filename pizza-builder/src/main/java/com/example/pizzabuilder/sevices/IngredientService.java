@@ -32,6 +32,9 @@ public class IngredientService {
             ingredientViews.add(ingredientConvertor.convert(i));
         return ingredientViews;
     }
+    public Ingredient getById(UUID uuid){
+        return ingredientRepository.findByUuid(uuid).get();
+    }
     @Transactional
     public List<IngredientView> getByGroup(UUID groupUuid){
 

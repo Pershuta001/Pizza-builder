@@ -3,7 +3,9 @@ package com.example.pizzabuilder.convertors;
 import com.example.pizzabuilder.model.IngredientInPizza;
 import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.repositories.UserRepository;
+import com.example.pizzabuilder.view.IngredientInPizzaFullView;
 import com.example.pizzabuilder.view.IngredientInPizzaView;
+import com.example.pizzabuilder.view.PizzaPatternFullView;
 import com.example.pizzabuilder.view.PizzaPatternView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -47,6 +49,22 @@ public class PizzaPatternConvertor {
         List<IngredientInPizzaView> res = new ArrayList<>();
         for(IngredientInPizza ingredient: ingredientViews){
             res.add(ingredientConvertor.convert(ingredient));
+        }
+        return res;
+    }
+    public PizzaPatternFullView convertFull(PizzaPattern pizzaPattern){
+        return PizzaPatternFullView.builder()
+                .ingredients(convertToFullViews(pizzaPattern.getIngredients()))
+                .name(pizzaPattern.getName())
+                .photoUrl(pizzaPattern.getPhotoUrl())
+                .userEntityUUID(pizzaPattern.getUserEntityUUID().getUuid())
+                .uuid(pizzaPattern.getUuid())
+                .build();
+    }
+    public List<IngredientInPizzaFullView> convertToFullViews(List<IngredientInPizza> ingredientViews){
+        List<IngredientInPizzaFullView> res = new ArrayList<>();
+        for(IngredientInPizza ingredient: ingredientViews){
+            res.add(ingredientConvertor.convertFull(ingredient));
         }
         return res;
     }

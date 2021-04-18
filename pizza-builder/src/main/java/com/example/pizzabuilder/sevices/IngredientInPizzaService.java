@@ -3,11 +3,14 @@ package com.example.pizzabuilder.sevices;
 import com.example.pizzabuilder.model.IngredientInPizza;
 import com.example.pizzabuilder.model.IngredientInPizzaId;
 import com.example.pizzabuilder.repositories.IngredientsInPizzaRepository;
+import com.example.pizzabuilder.repositories.PizzaPatternRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -30,5 +33,10 @@ public class IngredientInPizzaService {
         ingredientInPizza.setQuantity(quantity);
         return ingredientsInPizzaRepository.saveAndFlush(ingredientInPizza);
     }
+    @Transactional
+    public List<IngredientInPizza> getByPizzaPattern(UUID pizzaPatternUuid) throws Exception{
+        return ingredientsInPizzaRepository.findByPatternUuid(pizzaPatternUuid);
+    }
+
 
 }

@@ -14,6 +14,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -59,12 +60,12 @@ public class PizzaPatternService {
         PizzaPattern converted = pizzaPatternConvertor.convert(pizzaPatternView);
         converted.setConfirmed(false);
         PizzaPattern pizzaPattern=pizzaPatternRepository.save(converted);
+        List<IngredientInPizza> ingredientInPizzas = new ArrayList<>();
         for(IngredientInPizza i:pizzaPattern.getIngredients()){
             i.getId().setPatternUuid(pizzaPattern.getUuid());
-            i.setPizzaPattern(pizzaPattern);
+            ingredientInPizzas.add(ingredientsInPizzaRepository.save(i));
+        }
 
-            i.setIngredient(ingredientRepository.findByUuid(i.getId().getIngredientUuid()).get());
-            ingredientsInPizzaRepository.save(i);}
         return pizzaPattern;
     }
 

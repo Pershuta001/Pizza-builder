@@ -30,6 +30,7 @@ public class OrderService {
 
     @Transactional
     public List<Order> getAll(){
+
         return orderRepository.findAll();
     }
     @Transactional
