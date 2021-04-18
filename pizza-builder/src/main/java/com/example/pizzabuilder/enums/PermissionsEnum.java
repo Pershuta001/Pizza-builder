@@ -8,6 +8,7 @@ public enum PermissionsEnum {
     PIZZA_PATTERN_CREATE("pizza_pattern:create"),
     PIZZA_PATTERN_UPDATE("pizza_pattern:update"),
     PIZZA_PATTERN_DELETE("pizza_pattern:delete"),
+    PIZZA_PATTERN_CONFIRM("pizza_pattern:confirm"),
 
     INGREDIENT_READ("ingredient:read"),
     INGREDIENT_CREATE("ingredient:create"),

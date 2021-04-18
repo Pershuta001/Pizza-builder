@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -38,5 +39,14 @@ public class PizzaPatternController {
         return ResponseEntity
                 .ok()
                 .body(pizzaPatternConvertor.convert(patternService.savePizzaPattern(pizzaPattern)));
+    }
+    @ResponseBody
+    @PreAuthorize("hasAuthority('pizza_pattern:confirm')")
+    @PostMapping("/patterns/confirm/{patternUuid}")
+    public ResponseEntity<PizzaPatternView> setConfirm(@PathVariable UUID patternUuid
+    ) throws Exception {
+        return ResponseEntity
+                .ok()
+                .body(pizzaPatternConvertor.convert(patternService.setConfirmed(patternUuid, true)));
     }
 }
