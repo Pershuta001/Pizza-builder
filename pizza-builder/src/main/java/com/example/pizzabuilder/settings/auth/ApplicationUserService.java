@@ -54,6 +54,7 @@ public class ApplicationUserService implements UserDetailsService {
     @SneakyThrows
     public String responseUser(){
         String res = "{";
+        res += String.format("\"uuid\": \"%s\",", user.getUuid());
        res += String.format("\"name\": \"%s\",", user.getName());
        res += String.format("\"email\": \"%s\",", user.getEmail());
        res += String.format("\"phone\": \"%s\",", user.getPhone());
@@ -64,9 +65,11 @@ public class ApplicationUserService implements UserDetailsService {
     @SneakyThrows
     public String responseUser(UserEntity user){
         String res = "{";
+        res += String.format("\"uuid\": \"%s\",", user.getUuid());
         res += String.format("\"name\": \"%s\",", user.getName());
         res += String.format("\"email\": \"%s\",", user.getEmail());
         res += String.format("\"phone\": \"%s\",", user.getPhone());
+        res += String.format("\"role\": \"%s\",", RolesEnum.values()[user.getRoleId()]);
         res += "\"address\":"+new ObjectMapper().writeValueAsString(user.getAddress())+"}";
         return res;
     }
