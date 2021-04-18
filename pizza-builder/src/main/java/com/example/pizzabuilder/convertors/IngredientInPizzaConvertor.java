@@ -15,13 +15,24 @@ public class IngredientInPizzaConvertor {
     public IngredientInPizza convert(IngredientInPizzaView ingredientView) {
 
         return IngredientInPizza.builder()
-                .ingredient(ingredientConvertor.convert(ingredientView.getIngredients()))
+                .ingredient(ingredientConvertor.convert(ingredientView.getIngredient()))
                 .quantity(ingredientView.getQuantity())
                 .id(IngredientInPizzaId.builder()
                         .patternUuid(ingredientView.getPatternUuid())
-                        .ingredientUuid(ingredientView.getIngredients().getUuid())
+                        .ingredientUuid(ingredientView.getIngredient().getUuid())
                         .build()
                 )
+                .build();
+
+    }
+    @SneakyThrows
+    public IngredientInPizzaView convert(IngredientInPizza ingredientView) {
+
+        return IngredientInPizzaView.builder()
+                .ingredient(ingredientConvertor.convert(ingredientView.getIngredient()))
+                .ingredientUuid(ingredientView.getId().getIngredientUuid())
+                .patternUuid(ingredientView.getId().getPatternUuid())
+                .quantity(ingredientView.getQuantity())
                 .build();
 
     }

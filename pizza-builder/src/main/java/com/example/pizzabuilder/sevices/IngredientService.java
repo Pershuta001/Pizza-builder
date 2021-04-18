@@ -2,6 +2,7 @@ package com.example.pizzabuilder.sevices;
 
 import com.example.pizzabuilder.convertors.IngredientConvertor;
 import com.example.pizzabuilder.model.Ingredient;
+import com.example.pizzabuilder.repositories.IngredientGroupRepository;
 import com.example.pizzabuilder.repositories.IngredientRepository;
 import com.example.pizzabuilder.view.IngredientView;
 import lombok.AllArgsConstructor;
@@ -12,18 +13,29 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
     private final IngredientConvertor ingredientConvertor;
+    private final IngredientGroupRepository ingredientGroupRepository;
 
 
     @Transactional
     public List<IngredientView> getAll(){
 
         List<Ingredient> ingredients = ingredientRepository.findAll();
+        List<IngredientView> ingredientViews = new ArrayList<>();
+        for(Ingredient i : ingredients)
+            ingredientViews.add(ingredientConvertor.convert(i));
+        return ingredientViews;
+    }
+    @Transactional
+    public List<IngredientView> getByGroup(UUID groupUuid){
+
+        List<Ingredient> ingredients = ingredientRepository.findByGroupUuid(ingredientGroupRepository.findByUuid(groupUuid));
         List<IngredientView> ingredientViews = new ArrayList<>();
         for(Ingredient i : ingredients)
             ingredientViews.add(ingredientConvertor.convert(i));

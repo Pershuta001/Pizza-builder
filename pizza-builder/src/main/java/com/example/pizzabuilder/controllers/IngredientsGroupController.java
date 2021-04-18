@@ -1,7 +1,9 @@
 package com.example.pizzabuilder.controllers;
 
+import com.example.pizzabuilder.convertors.IngredientGroupConvertor;
 import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.IngredientGroup;
+import com.example.pizzabuilder.model.IngredientInPizza;
 import com.example.pizzabuilder.sevices.IngredientGroupService;
 import com.example.pizzabuilder.view.IngredientGroupView;
 import com.example.pizzabuilder.view.IngredientView;
@@ -18,11 +20,10 @@ import java.util.UUID;
 public class IngredientsGroupController {
 
     private final IngredientGroupService ingredientGroupService;
-
     @ResponseBody
     @GetMapping("/products/group/all")
     @PreAuthorize("hasAuthority('ingredient:read')")
-    public ResponseEntity<List<IngredientGroup>> getAllGroups(
+    public ResponseEntity<List<IngredientGroupView>> getAllGroups(
     ) {
         return ResponseEntity
                 .ok()

@@ -37,18 +37,21 @@ public class PizzaPatternConvertor {
         }
         return res;
     }
-    /*public PizzaPatternView convert(PizzaPattern pizzaPattern){
+    public PizzaPatternView convert(PizzaPattern pizzaPattern){
         return PizzaPatternView.builder()
-                .confirmed()
-                .ingredients()
-                .name()
-                .photoUrl()
-                .name(pizzaPatternView.getName())
-                .confirmed(pizzaPatternView.getConfirmed())
-                .userEntityUUID(userRepository.findByUuid(pizzaPatternView.getUserEntityUUID()).get())
-                .ingredients(convert(pizzaPatternView.getIngredients()))
-                .photoUrl(pizzaPatternView.getPhotoUrl())
-                .uuid(pizzaPatternView.getUuid())
+                .confirmed(pizzaPattern.getConfirmed())
+                .ingredients(convertToViews(pizzaPattern.getIngredients()))
+                .name(pizzaPattern.getName())
+                .photoUrl(pizzaPattern.getPhotoUrl())
+                .userEntityUUID(pizzaPattern.getUserEntityUUID().getUuid())
+                .uuid(pizzaPattern.getUuid())
                 .build();
-    }*/
+    }
+    public List<IngredientInPizzaView> convertToViews(List<IngredientInPizza> ingredientViews){
+        List<IngredientInPizzaView> res = new ArrayList<>();
+        for(IngredientInPizza ingredient: ingredientViews){
+            res.add(ingredientConvertor.convert(ingredient));
+        }
+        return res;
+    }
 }

@@ -24,8 +24,12 @@ public class IngredientGroupService {
     private final IngredientGroupConvertor ingredientGroupConvertor;
 
     @Transactional
-    public List<IngredientGroup> getAll(){
-        return ingredientGroupRepository.findAll();
+    public List<IngredientGroupView> getAll(){
+        List<IngredientGroup> ingredientGroups = ingredientGroupRepository.findAll();
+        List<IngredientGroupView> ingredientGroupViews = new ArrayList<>();
+        for(IngredientGroup i : ingredientGroups)
+            ingredientGroupViews.add(ingredientGroupConvertor.convert(i));
+        return ingredientGroupViews;
     }
 
     @Transactional

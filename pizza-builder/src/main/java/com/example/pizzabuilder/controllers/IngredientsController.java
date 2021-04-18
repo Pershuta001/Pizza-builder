@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -28,6 +29,15 @@ public class IngredientsController {
         return ResponseEntity
                 .ok()
                 .body(ingredientService.getAll());
+    }
+    @ResponseBody
+    @GetMapping("/products/{groupUuid}")
+    @PreAuthorize("hasAuthority('ingredient:read')")
+    public ResponseEntity<List<IngredientView>> getAllIngredients(@PathVariable UUID groupUuid
+                                                                  ){
+        return ResponseEntity
+                .ok()
+                .body(ingredientService.getByGroup(groupUuid));
     }
 
     @ResponseBody
