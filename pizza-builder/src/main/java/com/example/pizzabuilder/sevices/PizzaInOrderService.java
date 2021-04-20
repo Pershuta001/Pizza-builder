@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -25,9 +26,9 @@ public class PizzaInOrderService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
-    public  PizzaInOrder saveNewPizzaInOrder(PizzaInOrderView pizzaInOrderView) throws Exception {
+    public PizzaInOrder saveNewPizzaInOrder(PizzaInOrderView pizzaInOrderView) throws Exception {
         PizzaInOrder pizzaInOrder = pizzaInOrderConvertor.convert(pizzaInOrderView);
-        pizzaInOrder.setPrice(pizzaInOrder.getQuantity()*Utils.countPatternPrice(pizzaPatternService.getById(pizzaInOrder.getId().getPizzaPatternUUID())));
+        pizzaInOrder.setPrice(pizzaInOrder.getQuantity() * Utils.countPatternPrice(pizzaPatternService.getById(pizzaInOrder.getId().getPizzaPatternUUID())));
         return pizzaInOrderRepository.save(pizzaInOrder);
     }
 
@@ -64,7 +65,7 @@ public class PizzaInOrderService {
             throw new EntityNotExistsException(UserEntity.class, pizzaInOrder.getId());
         PizzaInOrder pizzaInOrderDB = pizzaInOrderOptional.get();
         pizzaInOrderDB.setQuantity(pizzaInOrder.getQuantity());
-        pizzaInOrder.setPrice(pizzaInOrder.getQuantity()* Utils.countPatternPrice(pizzaPatternService.getById(pizzaInOrderDB.getId().getPizzaPatternUUID())));
+        pizzaInOrder.setPrice(pizzaInOrder.getQuantity() * Utils.countPatternPrice(pizzaPatternService.getById(pizzaInOrderDB.getId().getPizzaPatternUUID())));
         return pizzaInOrderRepository.saveAndFlush(pizzaInOrderDB);
     }
 
@@ -98,4 +99,17 @@ public class PizzaInOrderService {
         return res;
     }
 
+    public PizzaInOrder increment(String email, UUID patternUuid, Integer size, Integer val) {
+        List<PizzaInOrder> pizzaInOrder = pizzaInOrderRepository.getCartByUserEmail(email);
+        for (PizzaInOrder pizza : pizzaInOrder) {
+            if (pizza.getId().getPizzaSize().equals(size) &&
+                    pizza.getId().getPizzaPatternUUID().equals(patternUuid)) {
+                pizza.setQuantity(pizza.getQuantity() + val);
+                pizzaInOrderRepository.save(pizza);
+                return pizza;
+            }
+
+        }
+        return null;
+    }
 }

@@ -65,13 +65,77 @@ public class OrderController {
                 .body(pizzaInOrderConvertor.convert(pizzaInOrderService.getUserCart(email)));
     }
 
-    @SneakyThrows
+
+    @ResponseBody
+    @PutMapping("/pattern/increment/{uuid}/{size}")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    public ResponseEntity<PizzaInOrderWithPatternName> increment(
+            @PathVariable UUID uuid,
+            @PathVariable Integer size
+    ) {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok()
+                .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, 1)));
+    }
+    @ResponseBody
+    @PutMapping("/pattern/increment/{uuid}/{size}/{val}")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    public ResponseEntity<PizzaInOrderWithPatternName> increment(
+            @PathVariable UUID uuid,
+            @PathVariable Integer size,
+            @PathVariable Integer val
+    ) {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok()
+                .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, val)));
+    }
+    @ResponseBody
+    @PutMapping("/pattern/decrement/{uuid}/{size}")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    public ResponseEntity<PizzaInOrderWithPatternName> decrement(
+            @PathVariable UUID uuid,
+            @PathVariable Integer size
+    ) {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok()
+                .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, -1)));
+    }
+    @ResponseBody
+    @PutMapping("/pattern/decrement/{uuid}/{size}/{val}")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    public ResponseEntity<PizzaInOrderWithPatternName> decrement(
+            @PathVariable UUID uuid,
+            @PathVariable Integer size,
+            @PathVariable Integer val
+    ) {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok()
+                .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, -val)));
+    }
+
+    @ResponseBody
+    @PutMapping("/update-order")
+    @PreAuthorize("hasAuthority('order:update')")
+    public ResponseEntity<String> updateOrder(
+            @RequestBody OrderView orderView
+    ) throws EntityNotExistsException {
+        Order order = null;//orderService.updateOrder(orderView, email);
+        return ResponseEntity
+                .ok()
+                .body(orderService.responseOrder(order));
+    }
+
+
     @ResponseBody
     @PostMapping("/create-pizza-in-order")
     @PreAuthorize("hasAuthority('pizza_in_order:create')")
     public ResponseEntity<String> addNewPizzaInOrder(
             @RequestBody PizzaInOrderView pizzaInOrderView
-            ){
+            ) throws Exception {
         PizzaInOrder pizzaInOrder = pizzaInOrderService.saveNewPizzaInOrder(pizzaInOrderView);
         return ResponseEntity
                 .ok()

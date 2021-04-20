@@ -41,6 +41,21 @@ public class PizzaPatternController {
     }
     @ResponseBody
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    @GetMapping("/patterns/current")
+    public ResponseEntity<List<PizzaPatternFullView>> getAllPatternsForUser(
+    ){
+        List<PizzaPattern> patterns = patternService.getAllForUser();
+        List<PizzaPatternFullView> result = new ArrayList<>();
+        for(PizzaPattern p:patterns)
+            result.add(pizzaPatternConvertor.convertFull(p));
+
+        return ResponseEntity
+                .ok()
+                .body(result);
+    }
+    @ResponseBody
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+
     @GetMapping("/patterns/confirmed")
     public ResponseEntity<List<PizzaPatternFullView>> getConfirmedPatterns(
     ){
