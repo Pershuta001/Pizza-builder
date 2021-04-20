@@ -1,3 +1,6 @@
+insert into users(uuid, email, hashed_password, name, role_id,phone)
+values ('b210ad51-7558-48f6-b8b0-40e536e2eda7', 'admin@example.com', '$2a$10$fW131c/DHDePUXyHeaBz1OQZN6ERZxKK3UIT6iCnst8WsFiFu3sx.', 'Ivan', 2, '+380668897412'),
+       ('9ff585cb-3865-4589-bd3d-749cd8872fa5', 'shutyak2001@gmail.com', '$2a$10$fW131c/DHDePUXyHeaBz1OQZN6ERZxKK3UIT6iCnst8WsFiFu3sx.', 'Taisiia', 1, '+380668898412');
 insert into ingredient_group (uuid, name, label)
 values ('9ff585cb-3865-4589-bd3d-749cd8872fa8','Meat','🥩'),
        ('205ffc2c-2445-4ca3-8969-5d5e4bcb7777','Cheese','🧀'),
@@ -123,3 +126,21 @@ INSERT INTO ingredient_group_ingredients (ingredient_group_uuid, ingredients_uui
         ('4b5c8cc1-8773-43ee-a736-652b5a188893',
          '6fd5c4eb-ea62-4ca9-8e6f-e88df42b70ba')
          ;
+
+insert into pizza_pattern(uuid, confirmed, name, photo_url, user_uuid)
+values ('d56ef4ec-2f16-45e0-9e97-ae5236a06213', true, 'Margarita', 'https://static.1000.menu/img/content-v2/ef/27/10853/picca-margarita-v-domashnix-usloviyax_1608783820_32_max.jpg','9ff585cb-3865-4589-bd3d-749cd8872fa5' );
+
+insert into ingredient_in_pizza (ingredient_uuid, pattern_uuid, quantity)
+values ('2ce1ef95-2bf3-4ec8-8702-be205dc2cf74','d56ef4ec-2f16-45e0-9e97-ae5236a06213',1),
+       ('e77aca0b-936a-46d4-8699-6bd3f807c94d','d56ef4ec-2f16-45e0-9e97-ae5236a06213',1),
+       ('6fd5c4eb-ea62-4ca9-8e6f-e88df42b70ba','d56ef4ec-2f16-45e0-9e97-ae5236a06213',2),
+       ('36c2ad28-855d-4486-b426-3e4961499aff','d56ef4ec-2f16-45e0-9e97-ae5236a06213',3),
+       ('0b2c03ee-4436-4de5-a27b-d1f276fd8680','d56ef4ec-2f16-45e0-9e97-ae5236a06213',1),
+       ('d2d1b18e-1e7f-4a75-82c0-5a85a82bad3f','d56ef4ec-2f16-45e0-9e97-ae5236a06213',1);
+insert into pizza_pattern_ingredients(pizza_pattern_uuid, ingredients_ingredient_uuid, ingredients_pattern_uuid)
+VALUES ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','2ce1ef95-2bf3-4ec8-8702-be205dc2cf74','d56ef4ec-2f16-45e0-9e97-ae5236a06213'),
+       ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','e77aca0b-936a-46d4-8699-6bd3f807c94d','d56ef4ec-2f16-45e0-9e97-ae5236a06213'),
+       ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','6fd5c4eb-ea62-4ca9-8e6f-e88df42b70ba','d56ef4ec-2f16-45e0-9e97-ae5236a06213'),
+       ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','36c2ad28-855d-4486-b426-3e4961499aff','d56ef4ec-2f16-45e0-9e97-ae5236a06213'),
+       ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','0b2c03ee-4436-4de5-a27b-d1f276fd8680','d56ef4ec-2f16-45e0-9e97-ae5236a06213'),
+       ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','d2d1b18e-1e7f-4a75-82c0-5a85a82bad3f','d56ef4ec-2f16-45e0-9e97-ae5236a06213');
