@@ -1,17 +1,21 @@
 package com.example.pizzabuilder.sevices;
 
 import com.example.pizzabuilder.convertors.OrderConvertor;
+import com.example.pizzabuilder.convertors.PizzaInOrderConvertor;
 import com.example.pizzabuilder.enums.OrderStatusEnum;
 import com.example.pizzabuilder.enums.RolesEnum;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.*;
 import com.example.pizzabuilder.repositories.*;
 import com.example.pizzabuilder.utils.Utils;
+import com.example.pizzabuilder.view.FullOrderView;
 import com.example.pizzabuilder.view.OrderView;
+import com.example.pizzabuilder.view.PizzaInOrderView;
 import com.example.pizzabuilder.view.UserViewSignUp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,8 +30,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PizzaInOrderRepository pizzaInOrderRepository;
-    private final PizzaPatternRepository pizzaPatternRepository;
+    private final PizzaPatternService pizzaPatternService;
+    private final PizzaInOrderService service;
     private final OrderConvertor orderConvertor;
+    private final PizzaInOrderConvertor pizzaInOrderConvertor;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
@@ -65,7 +71,7 @@ public class OrderService {
         PizzaInOrder pizzaInOrder = new PizzaInOrder();
         pizzaInOrder.setId(new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize()));
         pizzaInOrder.setQuantity(newOrder.getAmount());
-        pizzaInOrder.setPrice(pizzaInOrder.getQuantity()* Utils.countPatternPrice(pizzaPatternRepository.findById(newOrder.getPattern()).get()));
+        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern()));
         order.setTotalPrice(pizzaInOrder.getPrice());
         pizzaInOrderRepository.save(pizzaInOrder);
         return order;
@@ -73,14 +79,34 @@ public class OrderService {
 
     @SneakyThrows
     @Transactional
-    public Order confirmOrder(UUID orderUuid, Address address) {
-        Optional<Order> orderOptional = orderRepository.findById(orderUuid);
-        if (!orderOptional.isPresent())
-            throw new Exception("No order with id: " + orderUuid);
-        Order order = orderOptional.get();
-        order.setStatus(OrderStatusEnum.ORDERED);
-        order.setAddress(address);
-        return orderRepository.save(order);
+    public FullOrderView confirmOrder(Address address) {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity userEntity = userRepository.findByEmail(email).get();
+        FullOrderView res = new FullOrderView();
+        List<Order> all = orderRepository.findAll();
+        res.setTotalPrice(cartPrice());
+        res.setAddress(address);
+        res.setUserName(userEntity.getName());
+        List<PizzaInOrderView> userCart = service.getUserCart(email);
+        res.setPatternViewList(pizzaInOrderConvertor.convert(userCart));
+        for (Order order:all) {
+            order.setStatus(OrderStatusEnum.ORDERED);
+            order.setAddress(address);
+            orderRepository.save(order);
+        }
+
+        return res;
+    }
+
+    private Double cartPrice() {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<PizzaInOrder> cartByUserEmail = pizzaInOrderRepository.getCartByUserEmail(email);
+        double price = 0;
+        for(PizzaInOrder pizzaInOrder: cartByUserEmail){
+            price += pizzaInOrder.getPrice()*pizzaInOrder.getQuantity();
+        }
+        return price;
+
     }
 
     @SneakyThrows
