@@ -1,9 +1,6 @@
 package com.example.pizzabuilder.view;
 
-import com.example.pizzabuilder.model.Address;
-import com.example.pizzabuilder.model.Order;
 import com.example.pizzabuilder.model.PizzaInOrder;
-import com.example.pizzabuilder.model.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,17 +16,21 @@ import java.util.List;
 public class OrderResponse {
 
     private List<OrderView> patternsInOrder;
+    private Double totalPrice;
 
     public static OrderResponse convert(List<PizzaInOrder> patterns) {
 
         List<OrderView> res = new ArrayList<>();
+        Double totalPrice = 0.0;
         for (PizzaInOrder pat : patterns) {
+            totalPrice += pat.getPrice();
             res.add(OrderView.builder()
                     .amount(pat.getQuantity())
                     .pattern(pat.getId().getPizzaPatternUUID())
-                    .size(pat.getId().getPizzaSize()).build());
+                    .size(pat.getId().getPizzaSize())
+                    .price(pat.getPrice()).build());
         }
-        return OrderResponse.builder().patternsInOrder(res).build();
+        return OrderResponse.builder().patternsInOrder(res).totalPrice(totalPrice).build();
     }
 
 }

@@ -1,13 +1,11 @@
 package com.example.pizzabuilder.sevices;
 
 import com.example.pizzabuilder.convertors.PizzaInOrderConvertor;
-import com.example.pizzabuilder.enums.OrderStatusEnum;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.*;
 import com.example.pizzabuilder.repositories.PizzaInOrderRepository;
+import com.example.pizzabuilder.utils.Utils;
 import com.example.pizzabuilder.view.PizzaInOrderView;
-import com.example.pizzabuilder.view.PizzaInOrderWithPatternName;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -22,14 +20,14 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PizzaInOrderService {
     private final PizzaInOrderRepository pizzaInOrderRepository;
+    private final PizzaPatternService pizzaPatternService;
     private final PizzaInOrderConvertor pizzaInOrderConvertor;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
-    public PizzaInOrder saveNewPizzaInOrder(PizzaInOrderView pizzaInOrderView) {
+    public  PizzaInOrder saveNewPizzaInOrder(PizzaInOrderView pizzaInOrderView) throws Exception {
         PizzaInOrder pizzaInOrder = pizzaInOrderConvertor.convert(pizzaInOrderView);
-        //TODO how to count price
-        pizzaInOrder.setPrice(100.0);
+        pizzaInOrder.setPrice(pizzaInOrder.getQuantity()*Utils.countPatternPrice(pizzaPatternService.getById(pizzaInOrder.getId().getPizzaPatternUUID())));
         return pizzaInOrderRepository.save(pizzaInOrder);
     }
 
@@ -59,15 +57,14 @@ public class PizzaInOrderService {
     }
 
     @Transactional
-    public PizzaInOrder updatePizzaInOrder(PizzaInOrderView pizzaInOrderView) throws EntityNotExistsException {
+    public PizzaInOrder updatePizzaInOrder(PizzaInOrderView pizzaInOrderView) throws Exception {
         PizzaInOrder pizzaInOrder = pizzaInOrderConvertor.convert(pizzaInOrderView);
         Optional<PizzaInOrder> pizzaInOrderOptional = pizzaInOrderRepository.findById(pizzaInOrder.getId());
         if (!pizzaInOrderOptional.isPresent())
             throw new EntityNotExistsException(UserEntity.class, pizzaInOrder.getId());
         PizzaInOrder pizzaInOrderDB = pizzaInOrderOptional.get();
         pizzaInOrderDB.setQuantity(pizzaInOrder.getQuantity());
-        //TODO price...
-        pizzaInOrderDB.setPrice(200.0);
+        pizzaInOrder.setPrice(pizzaInOrder.getQuantity()* Utils.countPatternPrice(pizzaPatternService.getById(pizzaInOrderDB.getId().getPizzaPatternUUID())));
         return pizzaInOrderRepository.saveAndFlush(pizzaInOrderDB);
     }
 
@@ -100,4 +97,5 @@ public class PizzaInOrderService {
 
         return res;
     }
+
 }

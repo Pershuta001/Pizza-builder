@@ -32,14 +32,16 @@ public class PizzaPatternService {
         return pizzaPatternRepository.findAll();
     }
 
-    @Transactional
     public List<PizzaPattern> getAllForUser() {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return pizzaPatternRepository.getAllByUserEntityUUID(userRepository.findByEmail(email).get());
     }
 
     @Transactional
-    PizzaPattern save(PizzaPattern pizzaPattern) {
+    public List<PizzaPattern> getConfirmed(){
+        return pizzaPatternRepository.findByConfirmed(true);
+    }
+    @Transactional PizzaPattern save(PizzaPattern pizzaPattern){
         return pizzaPatternRepository.save(pizzaPattern);
     }
 

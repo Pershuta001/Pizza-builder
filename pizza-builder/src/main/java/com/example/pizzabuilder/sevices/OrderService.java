@@ -6,6 +6,7 @@ import com.example.pizzabuilder.enums.RolesEnum;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.*;
 import com.example.pizzabuilder.repositories.*;
+import com.example.pizzabuilder.utils.Utils;
 import com.example.pizzabuilder.view.OrderView;
 import com.example.pizzabuilder.view.UserViewSignUp;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,22 +53,6 @@ public class OrderService {
         return orderRepository.findByStatusAndUserEntity(OrderStatusEnum.IN_CART, userEntity.get());
     }
 
-//    @Transactional
-//    public Order updateOrder(OrderView orderView, String email) throws EntityNotExistsException {
-//        Optional<Order> optionalOrder = orderRepository.findByUuid(orderView.getUuid());
-//        if (!optionalOrder.isPresent())
-//            throw new EntityNotExistsException(UserEntity.class, orderView.getUuid());
-//        Order order = optionalOrder.get();
-//        //TODO how to count total price
-//        order.setTotalPrice(orderView.getTotalPrice());
-//        order.setDataTime(orderView.getDate());
-//        order.setStatus(orderView.getStatus());
-//        order.setAddress(orderView.getAddress());
-//        return orderRepository.saveAndFlush(order);
-//
-//
-//    }
-
     @Transactional
     public Order saveOrderToCart(OrderView newOrder, String email) {
 
@@ -80,8 +65,8 @@ public class OrderService {
         PizzaInOrder pizzaInOrder = new PizzaInOrder();
         pizzaInOrder.setId(new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize()));
         pizzaInOrder.setQuantity(newOrder.getAmount());
-        pizzaInOrder.setPrice(100.);
-
+        pizzaInOrder.setPrice(pizzaInOrder.getQuantity()* Utils.countPatternPrice(pizzaPatternRepository.findById(newOrder.getPattern()).get()));
+        order.setTotalPrice(pizzaInOrder.getPrice());
         pizzaInOrderRepository.save(pizzaInOrder);
         return order;
     }
@@ -110,8 +95,5 @@ public class OrderService {
         res += "\"address\":" + objectMapper.writeValueAsString(order.getAddress()) + "}";
         return res;
     }
-    //TODO exceptions timeFinding
-    /*
-    getByDate criteria
-     */
+
 }
