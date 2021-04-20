@@ -2,12 +2,24 @@ package com.example.pizzabuilder.convertors;
 
 import com.example.pizzabuilder.model.PizzaInOrder;
 import com.example.pizzabuilder.model.PizzaInOrderId;
+import com.example.pizzabuilder.model.PizzaPattern;
+import com.example.pizzabuilder.repositories.PizzaPatternRepository;
 import com.example.pizzabuilder.view.PizzaInOrderView;
+import com.example.pizzabuilder.view.PizzaInOrderWithPatternName;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class PizzaInOrderConvertor {
-    public PizzaInOrder convert(PizzaInOrderView pizzaInOrderView){
+
+    private final PizzaPatternRepository pizzaPatternRepository;
+
+    public PizzaInOrder convert(PizzaInOrderView pizzaInOrderView) {
         return PizzaInOrder.builder()
                 .id(PizzaInOrderId.builder()
                         .ordersUUID(pizzaInOrderView.getOrdersUUID())
@@ -16,5 +28,31 @@ public class PizzaInOrderConvertor {
                         .build())
                 .quantity(pizzaInOrderView.getQuantity())
                 .build();
+    }
+
+    public PizzaInOrderView convert(PizzaInOrder pizzaInOrder) {
+        return PizzaInOrderView.builder()
+                .ordersUUID(pizzaInOrder.getId().getOrdersUUID())
+                .pizzaPatternUUID(pizzaInOrder.getId().getPizzaPatternUUID())
+                .pizzaSize(pizzaInOrder.getId().getPizzaSize())
+                .quantity(pizzaInOrder.getQuantity())
+                .price(pizzaInOrder.getPrice())
+                .build();
+    }
+
+
+    public List<PizzaInOrderWithPatternName> convert(List<PizzaInOrderView> pizzaInOrder) {
+        List<PizzaInOrderWithPatternName> res = new ArrayList<>();
+
+        for (PizzaInOrderView pizza : pizzaInOrder) {
+            PizzaPattern pattern = pizzaPatternRepository.getOne(pizza.getPizzaPatternUUID());
+            res.add(PizzaInOrderWithPatternName.builder()
+                    .name(pattern.getName())
+                    .photoUrl(pattern.getPhotoUrl())
+                    .price(pizza.getPrice())
+                    .size(pizza.getPizzaSize())
+                    .quantity(pizza.getQuantity()).build());
+        }
+        return res;
     }
 }

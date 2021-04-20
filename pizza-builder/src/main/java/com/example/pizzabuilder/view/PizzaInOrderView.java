@@ -19,5 +19,6 @@ public class PizzaInOrderView {
     private Integer pizzaSize;
 
     private Integer quantity;
+    private Double price;
 
 }

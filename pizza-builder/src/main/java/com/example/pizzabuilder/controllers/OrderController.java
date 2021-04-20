@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.controllers;
 
+import com.example.pizzabuilder.convertors.PizzaInOrderConvertor;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.Address;
 import com.example.pizzabuilder.model.Order;
@@ -9,6 +10,7 @@ import com.example.pizzabuilder.sevices.PizzaInOrderService;
 import com.example.pizzabuilder.view.OrderResponse;
 import com.example.pizzabuilder.view.OrderView;
 import com.example.pizzabuilder.view.PizzaInOrderView;
+import com.example.pizzabuilder.view.PizzaInOrderWithPatternName;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -24,7 +27,7 @@ import java.util.UUID;
 public class OrderController {
     private final OrderService orderService;
     private final PizzaInOrderService pizzaInOrderService;
-
+    private final PizzaInOrderConvertor pizzaInOrderConvertor;
 
     @ResponseBody
     @PostMapping("/cart/add")
@@ -55,11 +58,11 @@ public class OrderController {
     @ResponseBody
     @GetMapping("/cart")
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
-    public ResponseEntity<OrderResponse> getCart() throws EntityNotExistsException {
+    public ResponseEntity<List<PizzaInOrderWithPatternName>> getCart() throws EntityNotExistsException {
         String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity
                 .ok()
-                .body(OrderResponse.convert(pizzaInOrderService.getUserCart(email)));
+                .body(pizzaInOrderConvertor.convert(pizzaInOrderService.getUserCart(email)));
     }
 
     @SneakyThrows
