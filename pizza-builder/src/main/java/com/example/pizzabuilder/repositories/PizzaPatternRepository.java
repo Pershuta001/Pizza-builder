@@ -12,6 +12,8 @@ public interface PizzaPatternRepository extends JpaRepository<PizzaPattern, UUID
 
     Optional<PizzaPattern> getByName(String name);
 
+    PizzaPattern getByUuid(UUID pattern);
+
     List<PizzaPattern> findByConfirmed(Boolean confirmed);
 
     List<PizzaPattern> getAllByUserEntityUUID(UserEntity uuid);

@@ -88,10 +88,12 @@ public class PizzaPatternService {
 
     @Transactional
     public Double countPrice(UUID pizzaPattern) {
-        List<IngredientInPizza> byPatternUuid = ingredientsInPizzaRepository.findByPatternUuid(pizzaPattern);
+        List<Ingredient> byPatternUuid = ingredientRepository.getByPatternUUID(pizzaPattern);
         double res = 0;
-        for(IngredientInPizza ingredient : byPatternUuid){
-          res += ingredient.getQuantity() * ingredientRepository.findByUuid(ingredient.getId().getIngredientUuid()).get().getPrice();
+        for(Ingredient ingredient : byPatternUuid){
+          res += ingredient.getPrice() *
+                  ingredientsInPizzaRepository.getByIngredientAndPizzaPattern(
+                          ingredient.getUuid(), pizzaPattern).getQuantity();
         }
         return res;
     }
