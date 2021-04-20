@@ -90,7 +90,7 @@ public class PizzaInOrderService {
             PizzaInOrderView p = contains(res, pizza);
             if (p != null) {
                 p.setQuantity(p.getQuantity() + pizza.getQuantity());
-                p.setPrice(p.getPrice() + pizza.getPrice());
+                p.setPrice(p.getPrice()* p.getQuantity());
             } else {
                 res.add(pizzaInOrderConvertor.convert(pizza));
             }

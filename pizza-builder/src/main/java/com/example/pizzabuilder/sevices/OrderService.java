@@ -71,7 +71,7 @@ public class OrderService {
         PizzaInOrder pizzaInOrder = new PizzaInOrder();
         pizzaInOrder.setId(new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize()));
         pizzaInOrder.setQuantity(newOrder.getAmount());
-        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern()));
+        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern())* newOrder.getSize()*0.7 * newOrder.getAmount());
         order.setTotalPrice(pizzaInOrder.getPrice());
         pizzaInOrderRepository.save(pizzaInOrder);
         return order;
@@ -103,7 +103,7 @@ public class OrderService {
         List<PizzaInOrder> cartByUserEmail = pizzaInOrderRepository.getCartByUserEmail(email);
         double price = 0;
         for(PizzaInOrder pizzaInOrder: cartByUserEmail){
-            price += pizzaInOrder.getPrice()*pizzaInOrder.getQuantity();
+            price += pizzaInOrder.getPrice() * pizzaInOrder.getQuantity();
         }
         return price;
 
