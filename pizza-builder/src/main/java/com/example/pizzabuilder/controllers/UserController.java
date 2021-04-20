@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     private final UserService userService;

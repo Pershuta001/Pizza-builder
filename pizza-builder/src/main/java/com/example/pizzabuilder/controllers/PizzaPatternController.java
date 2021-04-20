@@ -19,7 +19,6 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PizzaPatternController {
     private final PizzaPatternService patternService;
     private final PizzaPatternConvertor pizzaPatternConvertor;
