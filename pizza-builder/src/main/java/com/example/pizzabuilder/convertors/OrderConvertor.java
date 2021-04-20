@@ -2,8 +2,12 @@ package com.example.pizzabuilder.convertors;
 
 import com.example.pizzabuilder.enums.OrderStatusEnum;
 import com.example.pizzabuilder.model.Order;
+import com.example.pizzabuilder.model.PizzaPattern;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
+import com.example.pizzabuilder.view.FullOrderView;
 import com.example.pizzabuilder.view.OrderView;
+import com.example.pizzabuilder.view.PizzaInOrderView;
+import com.example.pizzabuilder.view.PizzaPatternView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -31,12 +35,4 @@ public class OrderConvertor {
 //                .build();
 //    }
 
-    public List<OrderView> convert(List<Order> orders) {
-        List<OrderView> res = new ArrayList<>();
-        for (Order ord : orders) {
-
-        }
-
-        return null;
-    }
 }

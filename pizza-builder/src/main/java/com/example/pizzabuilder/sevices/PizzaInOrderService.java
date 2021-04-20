@@ -81,7 +81,7 @@ public class PizzaInOrderService {
     }
 
     @Transactional
-    public List<PizzaInOrderView> getUserCart(String email) throws EntityNotExistsException {
+    public List<PizzaInOrderView> getUserCart(String email) {
         System.out.println(email);
         List<PizzaInOrder> pizzaInOrder = pizzaInOrderRepository.getCartByUserEmail(email);
         List<PizzaInOrderView> res = new ArrayList<>();

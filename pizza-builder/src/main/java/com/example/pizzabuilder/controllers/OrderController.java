@@ -7,10 +7,7 @@ import com.example.pizzabuilder.model.Order;
 import com.example.pizzabuilder.model.PizzaInOrder;
 import com.example.pizzabuilder.sevices.OrderService;
 import com.example.pizzabuilder.sevices.PizzaInOrderService;
-import com.example.pizzabuilder.view.OrderResponse;
-import com.example.pizzabuilder.view.OrderView;
-import com.example.pizzabuilder.view.PizzaInOrderView;
-import com.example.pizzabuilder.view.PizzaInOrderWithPatternName;
+import com.example.pizzabuilder.view.*;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
@@ -45,14 +42,12 @@ public class OrderController {
     @ResponseBody
     @PutMapping("/cart/order")
     @PreAuthorize("hasAuthority('order:create')")
-    public ResponseEntity<String> confirmOrder(
-            @RequestBody UUID orderUuid,
+    public ResponseEntity<FullOrderView> confirmOrder(
             @RequestBody Address address
             ){
-        Order order = orderService.confirmOrder(orderUuid, address);
         return ResponseEntity
                 .ok()
-                .body(orderService.responseOrder(order));
+                .body(orderService.confirmOrder(address));
     }
 
     @ResponseBody

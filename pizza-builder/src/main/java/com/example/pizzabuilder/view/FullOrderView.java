@@ -1,0 +1,22 @@
+package com.example.pizzabuilder.view;
+
+import com.example.pizzabuilder.model.Address;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class FullOrderView {
+
+    private Address address;
+    private String userName;
+    private List<PizzaInOrderWithPatternName> patternViewList;
+    private Double totalPrice;
+
+}
