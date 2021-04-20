@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface PizzaPatternRepository extends JpaRepository<PizzaPattern, UUID> {
 
     Optional<PizzaPattern> getByName(String name);
+    List<PizzaPattern> findByConfirmed(Boolean confirmed);
 }

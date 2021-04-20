@@ -31,6 +31,11 @@ public class PizzaPatternService {
     public List<PizzaPattern> getAll(){
         return pizzaPatternRepository.findAll();
     }
+
+    @Transactional
+    public List<PizzaPattern> getConfirmed(){
+        return pizzaPatternRepository.findByConfirmed(true);
+    }
     @Transactional PizzaPattern save(PizzaPattern pizzaPattern){
         return pizzaPatternRepository.save(pizzaPattern);
     }
