@@ -24,7 +24,7 @@ public class Utils {
         return true;
     }
     public static Double countPatternPrice(PizzaPattern pizzaPattern){
-        Double price = 0.0;
+        double price = 0.0;
         for (IngredientInPizza ingredient : pizzaPattern.getIngredients())
             price += ingredient.getQuantity()*ingredient.getIngredient().getPrice();
         return price;

@@ -30,7 +30,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PizzaInOrderRepository pizzaInOrderRepository;
-    private final PizzaPatternRepository pizzaPatternRepository;
+    private final PizzaPatternService pizzaPatternService;
     private final PizzaInOrderService service;
     private final OrderConvertor orderConvertor;
     private final PizzaInOrderConvertor pizzaInOrderConvertor;
@@ -71,7 +71,7 @@ public class OrderService {
         PizzaInOrder pizzaInOrder = new PizzaInOrder();
         pizzaInOrder.setId(new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize()));
         pizzaInOrder.setQuantity(newOrder.getAmount());
-        pizzaInOrder.setPrice(pizzaInOrder.getQuantity()* Utils.countPatternPrice(pizzaPatternRepository.findById(newOrder.getPattern()).get()));
+        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern()));
         order.setTotalPrice(pizzaInOrder.getPrice());
         pizzaInOrderRepository.save(pizzaInOrder);
         return order;

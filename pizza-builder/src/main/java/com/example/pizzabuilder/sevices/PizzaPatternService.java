@@ -85,6 +85,16 @@ public class PizzaPatternService {
     public PizzaPattern updatePizzaPattern(PizzaPattern pizzaPattern) {
         return pizzaPatternRepository.saveAndFlush(pizzaPattern);
     }
+
+    @Transactional
+    public Double countPrice(UUID pizzaPattern) {
+        List<IngredientInPizza> byPatternUuid = ingredientsInPizzaRepository.findByPatternUuid(pizzaPattern);
+        double res = 0;
+        for(IngredientInPizza ingredient : byPatternUuid){
+          res += ingredient.getQuantity() * ingredientRepository.findByUuid(ingredient.getId().getIngredientUuid()).get().getPrice();
+        }
+        return res;
+    }
     /*
     getWithCriteriaParams
     getSortedWithCriteriaParams
