@@ -20,7 +20,7 @@ public class PizzaPatternConvertor {
     private final IngredientInPizzaConvertor ingredientConvertor;
     private final UserRepository userRepository;
 
-    public PizzaPattern convert(PizzaPatternView pizzaPatternView){
+    public PizzaPattern convert(PizzaPatternView pizzaPatternView) {
         return PizzaPattern.builder()
                 .name(pizzaPatternView.getName())
                 .userEntityUUID(userRepository.findByUuid(pizzaPatternView.getUserEntityUUID()).get())
@@ -29,41 +29,48 @@ public class PizzaPatternConvertor {
                 .uuid(pizzaPatternView.getUuid())
                 .build();
     }
-    public List<IngredientInPizza> convert(List<IngredientInPizzaView> ingredientViews){
+
+    public List<IngredientInPizza> convert(List<IngredientInPizzaView> ingredientViews) {
         List<IngredientInPizza> res = new ArrayList<>();
-        for(IngredientInPizzaView ingredientView: ingredientViews){
+        for (IngredientInPizzaView ingredientView : ingredientViews) {
             res.add(ingredientConvertor.convert(ingredientView));
         }
         return res;
     }
-    public PizzaPatternView convert(PizzaPattern pizzaPattern){
+
+    public PizzaPatternView convert(PizzaPattern pizzaPattern) {
         return PizzaPatternView.builder()
                 .ingredients(convertToViews(pizzaPattern.getIngredients()))
                 .name(pizzaPattern.getName())
                 .photoUrl(pizzaPattern.getPhotoUrl())
                 .userEntityUUID(pizzaPattern.getUserEntityUUID().getUuid())
                 .uuid(pizzaPattern.getUuid())
+                .confirmed(pizzaPattern.getConfirmed())
                 .build();
     }
-    public List<IngredientInPizzaView> convertToViews(List<IngredientInPizza> ingredientViews){
+
+    public List<IngredientInPizzaView> convertToViews(List<IngredientInPizza> ingredientViews) {
         List<IngredientInPizzaView> res = new ArrayList<>();
-        for(IngredientInPizza ingredient: ingredientViews){
+        for (IngredientInPizza ingredient : ingredientViews) {
             res.add(ingredientConvertor.convert(ingredient));
         }
         return res;
     }
-    public PizzaPatternFullView convertFull(PizzaPattern pizzaPattern){
+
+    public PizzaPatternFullView convertFull(PizzaPattern pizzaPattern) {
         return PizzaPatternFullView.builder()
                 .ingredients(convertToFullViews(pizzaPattern.getIngredients()))
                 .name(pizzaPattern.getName())
                 .photoUrl(pizzaPattern.getPhotoUrl())
                 .userEntityUUID(pizzaPattern.getUserEntityUUID().getUuid())
                 .uuid(pizzaPattern.getUuid())
+                .confirmed(pizzaPattern.getConfirmed())
                 .build();
     }
-    public List<IngredientInPizzaFullView> convertToFullViews(List<IngredientInPizza> ingredientViews){
+
+    public List<IngredientInPizzaFullView> convertToFullViews(List<IngredientInPizza> ingredientViews) {
         List<IngredientInPizzaFullView> res = new ArrayList<>();
-        for(IngredientInPizza ingredient: ingredientViews){
+        for (IngredientInPizza ingredient : ingredientViews) {
             res.add(ingredientConvertor.convertFull(ingredient));
         }
         return res;

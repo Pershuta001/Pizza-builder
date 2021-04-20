@@ -17,4 +17,5 @@ public class PizzaPatternFullView {
     private UUID userEntityUUID;
     private List<IngredientInPizzaFullView> ingredients;
     private String photoUrl;
+    private Boolean confirmed;
 }

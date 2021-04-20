@@ -1,12 +1,9 @@
 package com.example.pizzabuilder.controllers;
 
-import com.example.pizzabuilder.convertors.IngredientGroupConvertor;
 import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.IngredientGroup;
-import com.example.pizzabuilder.model.IngredientInPizza;
 import com.example.pizzabuilder.sevices.IngredientGroupService;
 import com.example.pizzabuilder.view.IngredientGroupView;
-import com.example.pizzabuilder.view.IngredientView;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

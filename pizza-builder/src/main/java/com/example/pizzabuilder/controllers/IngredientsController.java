@@ -25,16 +25,17 @@ public class IngredientsController {
     @GetMapping("/products/all")
     @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<IngredientView>> getAllIngredients(
-    ){
+    ) {
         return ResponseEntity
                 .ok()
                 .body(ingredientService.getAll());
     }
+
     @ResponseBody
     @GetMapping("/products/{groupUuid}")
     @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<IngredientView>> getAllIngredients(@PathVariable UUID groupUuid
-                                                                  ){
+    ) {
         return ResponseEntity
                 .ok()
                 .body(ingredientService.getByGroup(groupUuid));
@@ -45,9 +46,10 @@ public class IngredientsController {
     @PreAuthorize("hasAuthority('ingredient:create')")
     public ResponseEntity<IngredientView> addIngredient(
             @RequestBody IngredientView ingredientView
-            ) throws Exception {
+    ) throws Exception {
         Ingredient ingredient = ingredientService.save(ingredientView);
-        ingredientGroupService.addIngredient(ingredient.getGroupUuid().getUuid(), ingredient);
+        if (ingredient.getGroupUuid() != null)
+            ingredientGroupService.addIngredient(ingredient.getGroupUuid().getUuid(), ingredient);
         return ResponseEntity
                 .ok()
                 .body(ingredientConvertor.convert(ingredient));

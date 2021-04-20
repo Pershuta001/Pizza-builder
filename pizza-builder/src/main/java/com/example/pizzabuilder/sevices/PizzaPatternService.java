@@ -34,6 +34,7 @@ public class PizzaPatternService {
     @Transactional PizzaPattern save(PizzaPattern pizzaPattern){
         return pizzaPatternRepository.save(pizzaPattern);
     }
+
     @Transactional
     public PizzaPattern setConfirmed(UUID patternId, Boolean confirmedStatus) throws Exception{
         Optional<PizzaPattern> pizzaPattern = pizzaPatternRepository.findById(patternId);

@@ -22,4 +22,5 @@ public class PizzaPatternView {
     private UUID userEntityUUID;
     private List<IngredientInPizzaView> ingredients;
     private String photoUrl;
+    private Boolean confirmed;
 }

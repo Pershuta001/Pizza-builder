@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -24,17 +25,32 @@ public class OrderController {
     private final PizzaInOrderService pizzaInOrderService;
 
     @ResponseBody
-    @PostMapping("/create-cart")
+    @PostMapping("/cart/add")
     @PreAuthorize("hasAuthority('order:create')")
     public ResponseEntity<String> addNewOrderToCart(
             @RequestBody OrderView orderView
             ){
         String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Order order = orderService.saveNewOrder(orderView, email);
+        Order order = orderService.saveOrderToCart(orderView, email);
         return ResponseEntity
                 .ok()
                 .body(orderService.responseOrder(order));
     }
+
+    @ResponseBody
+    @PutMapping("/cart/order")
+    @PreAuthorize("hasAuthority('order:create')")
+    public ResponseEntity<String> confirmOrder(
+            @RequestBody UUID orderUuid
+            ){
+        Order order = orderService.confirmOrder(orderUuid);
+        return ResponseEntity
+                .ok()
+                .body(orderService.responseOrder(order));
+    }
+
+
+
     @ResponseBody
     @PutMapping("/update-order")
     @PreAuthorize("hasAuthority('order:update')")
