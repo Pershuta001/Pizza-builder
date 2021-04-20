@@ -20,13 +20,9 @@ import java.util.UUID;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "uuid", updatable = false, nullable = false)
-    private UUID uuid;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "user_uuid", nullable = false)

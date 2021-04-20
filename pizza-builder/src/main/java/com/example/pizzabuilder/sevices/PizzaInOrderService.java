@@ -1,6 +1,7 @@
 package com.example.pizzabuilder.sevices;
 
 import com.example.pizzabuilder.convertors.PizzaInOrderConvertor;
+import com.example.pizzabuilder.enums.OrderStatusEnum;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.*;
 import com.example.pizzabuilder.repositories.PizzaInOrderRepository;
@@ -12,6 +13,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,7 +47,6 @@ public class PizzaInOrderService {
     public String responsePizzaInOrder(PizzaInOrder pizzaInOrder){
         String res = "{";
         res += String.format("\"orderId\": \"%s\",", objectMapper.writeValueAsString(pizzaInOrder.getId().getOrdersUUID()));
-        res += String.format("\"pattern\": \"%s\",", objectMapper.writeValueAsString(pizzaInOrder.getPizzaPattern()));
         res += String.format("\"totalPrice\": \"%s\",", objectMapper.writeValueAsString(pizzaInOrder.getPrice()));
         res += String.format("\"quantity\": \"%s\",", objectMapper.writeValueAsString(pizzaInOrder.getQuantity()));
         res += "\"size\":"+objectMapper.writeValueAsString(pizzaInOrder.getId().getPizzaSize())+"}";
@@ -62,5 +63,11 @@ public class PizzaInOrderService {
         //TODO price...
         pizzaInOrderDB.setPrice(200.0);
         return pizzaInOrderRepository.saveAndFlush(pizzaInOrderDB);
+    }
+
+    @Transactional
+    public List<PizzaInOrder> getUserCart(String email) throws EntityNotExistsException {
+        System.out.println(email);
+        return pizzaInOrderRepository.getCartByUserEmail( email);
     }
 }

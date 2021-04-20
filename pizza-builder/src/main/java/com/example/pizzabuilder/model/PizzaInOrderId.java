@@ -18,7 +18,7 @@ public class PizzaInOrderId implements Serializable {
     private UUID pizzaPatternUUID;
 
     @Column(name="orders_uuid",nullable = false)
-    private UUID ordersUUID;
+    private Integer ordersUUID;
 
     @Column(name = "pizza_size", nullable = false)
     private Integer pizzaSize;

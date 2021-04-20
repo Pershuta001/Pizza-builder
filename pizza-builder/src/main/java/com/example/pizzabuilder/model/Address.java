@@ -13,13 +13,13 @@ import java.io.Serializable;
 @Embeddable
 @Data
 public class Address implements Serializable {
-    @Column(name="city", nullable = false)
+    @Column(name="city")
     private String city;
 
-    @Column(name="street", nullable = false)
+    @Column(name="street")
     private String street;
 
-    @Column(name="build", nullable = false)
+    @Column(name="build")
     private Integer build;
 
     @Column(name="flat")

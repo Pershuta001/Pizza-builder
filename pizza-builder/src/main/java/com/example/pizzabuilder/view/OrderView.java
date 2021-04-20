@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.sql.Date;
 import java.util.UUID;
@@ -15,13 +16,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class OrderView {
-    private UUID uuid;
 
-    private Double totalPrice;
+    private UUID pattern;
+    private Integer amount;
+    private Integer size;
 
-    private Date date;
-
-    private OrderStatusEnum status;
-
-    private Address address;
 }

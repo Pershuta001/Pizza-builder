@@ -1,10 +1,13 @@
 package com.example.pizzabuilder.controllers;
 
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
+import com.example.pizzabuilder.model.Address;
 import com.example.pizzabuilder.model.Order;
 import com.example.pizzabuilder.model.PizzaInOrder;
+import com.example.pizzabuilder.model.UserEntity;
 import com.example.pizzabuilder.sevices.OrderService;
 import com.example.pizzabuilder.sevices.PizzaInOrderService;
+import com.example.pizzabuilder.view.OrderResponse;
 import com.example.pizzabuilder.view.OrderView;
 import com.example.pizzabuilder.view.PizzaInOrderView;
 import lombok.AllArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +27,7 @@ import java.util.UUID;
 public class OrderController {
     private final OrderService orderService;
     private final PizzaInOrderService pizzaInOrderService;
+
 
     @ResponseBody
     @PostMapping("/cart/add")
@@ -41,12 +46,23 @@ public class OrderController {
     @PutMapping("/cart/order")
     @PreAuthorize("hasAuthority('order:create')")
     public ResponseEntity<String> confirmOrder(
-            @RequestBody UUID orderUuid
+            @RequestBody UUID orderUuid,
+            @RequestBody Address address
             ){
-        Order order = orderService.confirmOrder(orderUuid);
+        Order order = orderService.confirmOrder(orderUuid, address);
         return ResponseEntity
                 .ok()
                 .body(orderService.responseOrder(order));
+    }
+
+    @ResponseBody
+    @GetMapping("/cart")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    public ResponseEntity<OrderResponse> getCart() throws EntityNotExistsException {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok()
+                .body(OrderResponse.convert(pizzaInOrderService.getUserCart(email)));
     }
 
 
@@ -59,7 +75,7 @@ public class OrderController {
     ) throws EntityNotExistsException {
         String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Order order = orderService.updateOrder(orderView, email);
+        Order order = null;//orderService.updateOrder(orderView, email);
         return ResponseEntity
                 .ok()
                 .body(orderService.responseOrder(order));

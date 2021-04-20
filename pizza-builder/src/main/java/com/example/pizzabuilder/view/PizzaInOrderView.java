@@ -14,7 +14,7 @@ import java.util.UUID;
 public class PizzaInOrderView {
     private UUID pizzaPatternUUID;
 
-    private UUID ordersUUID;
+    private Integer ordersUUID;
 
     private Integer pizzaSize;
 

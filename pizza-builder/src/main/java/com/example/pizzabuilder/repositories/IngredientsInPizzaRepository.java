@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface IngredientsInPizzaRepository extends JpaRepository<IngredientInPizza, IngredientInPizzaId> {
     @Query("SELECT i FROM IngredientInPizza i JOIN FETCH i.ingredient WHERE i.id.patternUuid = ?1")
     List<IngredientInPizza> findByPatternUuid(UUID p);
+
+
 }

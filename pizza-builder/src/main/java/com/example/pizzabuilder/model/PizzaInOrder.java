@@ -17,19 +17,9 @@ public class PizzaInOrder {
     @EmbeddedId
     private PizzaInOrderId id;
 
-    @ManyToOne
-    @JoinColumn(name = "pizza_pattern_uuid", insertable = false, updatable = false)
-    private PizzaPattern pizzaPattern;
-
-    @ManyToOne
-    @JoinColumn(name = "orders_uuid", insertable = false, updatable = false)
-    private Order order;
-
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @Column(name = "price", nullable = false)
     private Double price;
-
-
 }
