@@ -42,6 +42,20 @@ public class PizzaPatternController {
     }
     @ResponseBody
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    @GetMapping("/patterns/current")
+    public ResponseEntity<List<PizzaPatternFullView>> getCurrentPatterns(
+    ){
+        List<PizzaPattern> patterns = patternService.getAllForUser();
+        List<PizzaPatternFullView> result = new ArrayList<>();
+        for(PizzaPattern p:patterns)
+            result.add(pizzaPatternConvertor.convertFull(p));
+
+        return ResponseEntity
+                .ok()
+                .body(result);
+    }
+    @ResponseBody
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
     @GetMapping("/patterns/{patternUuid}")
     public ResponseEntity<List<IngredientInPizza>> get(@PathVariable UUID patternUuid
     ) throws Exception {

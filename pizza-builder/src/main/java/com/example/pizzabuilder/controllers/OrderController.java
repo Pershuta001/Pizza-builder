@@ -75,8 +75,6 @@ public class OrderController {
     public ResponseEntity<String> updateOrder(
             @RequestBody OrderView orderView
     ) throws EntityNotExistsException {
-        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
         Order order = null;//orderService.updateOrder(orderView, email);
         return ResponseEntity
                 .ok()
