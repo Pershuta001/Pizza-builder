@@ -8,7 +8,6 @@ import com.example.pizzabuilder.view.PizzaInOrderView;
 import com.example.pizzabuilder.view.PizzaInOrderWithPatternName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +50,22 @@ public class PizzaInOrderConvertor {
                     .photoUrl(pattern.getPhotoUrl())
                     .price(pizza.getPrice())
                     .size(pizza.getPizzaSize())
+                    .patternUuid(pizza.getPizzaPatternUUID())
                     .quantity(pizza.getQuantity()).build());
         }
         return res;
     }
+
+    public PizzaInOrderWithPatternName convertWithName(PizzaInOrder pizzaInOrder) {
+
+        PizzaPattern pattern = pizzaPatternRepository.getOne(pizzaInOrder.getId().getPizzaPatternUUID());
+        return PizzaInOrderWithPatternName.builder()
+                .name(pattern.getName())
+                .photoUrl(pattern.getPhotoUrl())
+                .price(pizzaInOrder.getPrice())
+                .size(pizzaInOrder.getId().getPizzaSize())
+                .patternUuid(pizzaInOrder.getId().getPizzaPatternUUID())
+                .quantity(pizzaInOrder.getQuantity()).build();
+    }
+
 }

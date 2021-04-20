@@ -66,7 +66,31 @@ public class OrderController {
     }
 
 
-
+    @ResponseBody
+    @PutMapping("/pattern/increment/{uuid}/{size}")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    public ResponseEntity<PizzaInOrderWithPatternName> increment(
+            @PathVariable UUID uuid,
+            @PathVariable Integer size
+    ) {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok()
+                .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, 1)));
+    }
+    @ResponseBody
+    @PutMapping("/pattern/increment/{uuid}/{size}/{val}")
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    public ResponseEntity<PizzaInOrderWithPatternName> getCart(
+            @PathVariable UUID uuid,
+            @PathVariable Integer size,
+            @PathVariable Integer val
+    ) {
+        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity
+                .ok()
+                .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, val)));
+    }
 
     @ResponseBody
     @PutMapping("/update-order")
