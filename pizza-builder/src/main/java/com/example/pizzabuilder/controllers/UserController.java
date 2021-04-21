@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('user:update')")
     @PutMapping("/update-user")
     public ResponseEntity<String> updateUser(
             @RequestBody UserViewSignUp userViewSignUp
