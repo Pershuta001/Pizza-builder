@@ -26,7 +26,6 @@ public class PizzaPatternController {
     private final IngredientService ingredientService;
 
     @ResponseBody
-    @PreAuthorize("hasAuthority('pizza_pattern:read')")
     @GetMapping("/patterns/all")
     public ResponseEntity<List<PizzaPatternFullView>> getAllPatterns(
     ){
@@ -54,8 +53,6 @@ public class PizzaPatternController {
                 .body(result);
     }
     @ResponseBody
-    @PreAuthorize("hasAuthority('pizza_pattern:read')")
-
     @GetMapping("/patterns/confirmed")
     public ResponseEntity<List<PizzaPatternFullView>> getConfirmedPatterns(
     ){
@@ -69,7 +66,6 @@ public class PizzaPatternController {
                 .body(result);
     }
     @ResponseBody
-    @PreAuthorize("hasAuthority('pizza_pattern:read')")
     @GetMapping("/patterns/{patternUuid}")
     public ResponseEntity<List<IngredientInPizza>> get(@PathVariable UUID patternUuid
     ) throws Exception {

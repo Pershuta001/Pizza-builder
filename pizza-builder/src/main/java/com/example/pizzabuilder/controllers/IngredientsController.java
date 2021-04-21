@@ -23,7 +23,6 @@ public class IngredientsController {
 
     @ResponseBody
     @GetMapping("/products/all")
-    @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<IngredientView>> getAllIngredients(
     ) {
         return ResponseEntity
@@ -33,7 +32,6 @@ public class IngredientsController {
 
     @ResponseBody
     @GetMapping("/products/{groupUuid}")
-    @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<IngredientView>> getAllIngredients(@PathVariable UUID groupUuid
     ) {
         return ResponseEntity
@@ -54,6 +52,20 @@ public class IngredientsController {
                 .ok()
                 .body(ingredientConvertor.convert(ingredient));
     }
+
+    @ResponseBody
+    @PutMapping("/products/update")
+    @PreAuthorize("hasAuthority('ingredient:update')")
+    public ResponseEntity<IngredientView> updateIngredient(
+            @RequestBody IngredientView ingredientView
+    ) throws Exception {
+        Ingredient ingredient = ingredientService.update(ingredientView);
+        return ResponseEntity
+                .ok()
+                .body(ingredientConvertor.convert(ingredient));
+    }
+
+
     @DeleteMapping("/products/{uuid}")
     @PreAuthorize("hasAuthority('ingredient:delete')")
     public ResponseEntity deleteIngredient(@PathVariable UUID uuid

@@ -19,7 +19,6 @@ public class IngredientsGroupController {
     private final IngredientGroupService ingredientGroupService;
     @ResponseBody
     @GetMapping("/products/group/all")
-    @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<IngredientGroupView>> getAllGroups(
     ) {
         return ResponseEntity

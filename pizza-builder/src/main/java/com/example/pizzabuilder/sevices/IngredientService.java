@@ -64,5 +64,15 @@ public class IngredientService {
             throw new Exception("Ingredient with name "+ingredientView.getName()+ " is exist");
         return ingredientRepository.save(ingredientConvertor.convert(ingredientView));
     }
-
+    @Transactional
+    public Ingredient update(IngredientView ingredientView) {
+        Ingredient i = getById(ingredientView.getUuid());
+        i.setName(ingredientView.getName());
+        i.setPhotoUrl(ingredientView.getPhotoUrl());
+        i.setPrice(ingredientView.getPrice());
+        i.setVegetarian(ingredientView.getVegetarian());
+        i.setSpicy(ingredientView.getSpicy());
+        i.setVegan(ingredientView.getVegan());
+        return ingredientRepository.saveAndFlush(i);
+    }
 }
