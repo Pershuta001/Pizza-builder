@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PizzaInOrderRepository extends JpaRepository<PizzaInOrder, PizzaInOrderId> {
 
@@ -25,4 +26,10 @@ public interface PizzaInOrderRepository extends JpaRepository<PizzaInOrder, Pizz
     )
     List<PizzaInOrder> getCartByUserEmail(String email);
 
+    @Query(
+            value = "select * " +
+                    "from public.pizza_in_order " +
+                    "WHERE pizza_pattern_uuid = ?1 AND pizza_size = ?2",nativeQuery = true
+    )
+    List<PizzaInOrder> findAllByIdAndSize(UUID pattern, Integer size);
 }

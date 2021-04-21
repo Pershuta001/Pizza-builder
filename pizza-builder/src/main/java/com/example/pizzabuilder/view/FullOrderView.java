@@ -14,6 +14,7 @@ import java.util.List;
 @Builder
 public class FullOrderView {
 
+    private Integer checkId;
     private Address address;
     private String userName;
     private List<PizzaInOrderWithPatternName> patternViewList;

@@ -18,7 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     Optional<Order> findById(Integer uuid);
 
-
+    void deleteById(Integer id);
 
 
 }

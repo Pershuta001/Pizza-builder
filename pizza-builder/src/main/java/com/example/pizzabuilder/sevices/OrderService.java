@@ -22,6 +22,7 @@ import javax.transaction.Transactional;
 import java.rmi.NoSuchObjectException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -84,6 +85,7 @@ public class OrderService {
         UserEntity userEntity = userRepository.findByEmail(email).get();
         FullOrderView res = new FullOrderView();
         List<Order> all = orderRepository.findAll();
+        res.setCheckId(new Random().nextInt()*100000);
         res.setTotalPrice(cartPrice());
         res.setAddress(address);
         res.setUserName(userEntity.getName());
