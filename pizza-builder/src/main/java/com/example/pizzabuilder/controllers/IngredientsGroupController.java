@@ -50,4 +50,17 @@ public class IngredientsGroupController {
                 .body(ingredientGroupService.addIngredients(groupUUID, ingredient));
     }
 
+    @DeleteMapping("/products/group/{uuid}")
+    @PreAuthorize("hasAuthority('ingredient:delete')")
+    public ResponseEntity deleteGroup(@PathVariable UUID uuid
+    ) {
+        try {
+            ingredientGroupService.delete(uuid);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity
+                .ok().build();
+    }
+
 }

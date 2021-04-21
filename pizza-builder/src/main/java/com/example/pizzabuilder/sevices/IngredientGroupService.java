@@ -90,5 +90,8 @@ public class IngredientGroupService {
     public IngredientGroup getByUUID(UUID uuid){
         return ingredientGroupRepository.findByUuid(uuid);
     }
-
+    @Transactional
+    public void delete(UUID uuid) {
+        ingredientGroupRepository.deleteById(uuid);
+    }
 }
