@@ -3,12 +3,15 @@ package com.example.pizzabuilder.sevices;
 import com.example.pizzabuilder.convertors.PizzaInOrderConvertor;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.*;
+import com.example.pizzabuilder.repositories.OrderRepository;
 import com.example.pizzabuilder.repositories.PizzaInOrderRepository;
+import com.example.pizzabuilder.repositories.UserRepository;
 import com.example.pizzabuilder.utils.Utils;
 import com.example.pizzabuilder.view.PizzaInOrderView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,6 +24,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PizzaInOrderService {
     private final PizzaInOrderRepository pizzaInOrderRepository;
+    private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
     private final PizzaPatternService pizzaPatternService;
     private final PizzaInOrderConvertor pizzaInOrderConvertor;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -42,9 +47,20 @@ public class PizzaInOrderService {
         return pizzaInOrderRepository.saveAndFlush(pizzaInOrder);
     }
 
+
+
     @Transactional
-    public void delete(PizzaInOrderView pizzaInOrderId) {
-        pizzaInOrderRepository.deleteById(pizzaInOrderConvertor.convert(pizzaInOrderId).getId());
+    public void delete(UUID pattern, Integer size) {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserEntity user = userRepository.findByEmail(email).get();
+        List<PizzaInOrder> allByIdAndSize = pizzaInOrderRepository.findAllByIdAndSize(pattern, size);
+        for(PizzaInOrder pizzaInOrder: allByIdAndSize){
+            Order order = orderRepository.findById(pizzaInOrder.getId().getOrdersUUID()).get();
+            if(order.getUserEntity().getUuid().equals(user.getUuid())) {
+                pizzaInOrderRepository.deleteById(pizzaInOrder.getId());
+                orderRepository.deleteById(order.getId());
+            }
+        }
     }
 
     @SneakyThrows
@@ -90,7 +106,7 @@ public class PizzaInOrderService {
             PizzaInOrderView p = contains(res, pizza);
             if (p != null) {
                 p.setQuantity(p.getQuantity() + pizza.getQuantity());
-                p.setPrice(p.getPrice() + pizza.getPrice());
+                p.setPrice(p.getPrice()* p.getQuantity());
             } else {
                 res.add(pizzaInOrderConvertor.convert(pizza));
             }

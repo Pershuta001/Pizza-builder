@@ -149,12 +149,13 @@ public class OrderController {
                 .body(pizzaInOrderService.responsePizzaInOrder(pizzaInOrder));
     }
 
-    @DeleteMapping("/delete-pizza-in-order")
+    @DeleteMapping("/cart/delete/{uuid}/{size}")
     @PreAuthorize("hasAuthority('pizza_in_order:delete')")
     public ResponseEntity<String> deletePizzaInOrder(
-            @RequestBody PizzaInOrderView pizzaInOrderView
+            @PathVariable UUID uuid,
+            @PathVariable Integer size
     ) {
-        pizzaInOrderService.delete(pizzaInOrderView);
+        pizzaInOrderService.delete(uuid, size);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
