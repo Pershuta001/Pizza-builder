@@ -72,7 +72,7 @@ public class OrderService {
         PizzaInOrder pizzaInOrder = new PizzaInOrder();
         pizzaInOrder.setId(new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize()));
         pizzaInOrder.setQuantity(newOrder.getAmount());
-        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern())* newOrder.getSize()*0.7 * newOrder.getAmount());
+        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern())* newOrder.getSize()*0.7);
         order.setTotalPrice(pizzaInOrder.getPrice());
         pizzaInOrderRepository.save(pizzaInOrder);
         return order;
@@ -92,9 +92,11 @@ public class OrderService {
         List<PizzaInOrderView> userCart = service.getUserCart(email);
         res.setPatternViewList(pizzaInOrderConvertor.convert(userCart));
         for (Order order:all) {
-            order.setStatus(OrderStatusEnum.ORDERED);
-            order.setAddress(address);
-            orderRepository.save(order);
+            if(order.getUserEntity().equals(userEntity)) {
+                order.setStatus(OrderStatusEnum.ORDERED);
+                order.setAddress(address);
+                orderRepository.save(order);
+            }
         }
 
         return res;
