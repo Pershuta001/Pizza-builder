@@ -54,4 +54,16 @@ public class IngredientsController {
                 .ok()
                 .body(ingredientConvertor.convert(ingredient));
     }
+    @DeleteMapping("/products/{uuid}")
+    @PreAuthorize("hasAuthority('ingredient:delete')")
+    public ResponseEntity deleteIngredient(@PathVariable UUID uuid
+    ) {
+        try {
+            ingredientService.delete(uuid);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity
+                .ok().build();
+    }
 }

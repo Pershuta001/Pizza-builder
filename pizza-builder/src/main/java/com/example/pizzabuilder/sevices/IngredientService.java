@@ -51,6 +51,11 @@ public class IngredientService {
             throw new Exception("Ingredient with name "+name+ " is exist");
         return ingredientRepository.save(Ingredient.builder().name(name).vegan(vegan).spicy(spicy).vegetarian(vegetarian).build());
     }
+    @Transactional
+    public void delete(UUID uuid){
+        ingredientRepository.deleteRelations(uuid);
+        ingredientRepository.deleteById(uuid);
+    }
 
     @SneakyThrows
     @Transactional
@@ -59,7 +64,5 @@ public class IngredientService {
             throw new Exception("Ingredient with name "+ingredientView.getName()+ " is exist");
         return ingredientRepository.save(ingredientConvertor.convert(ingredientView));
     }
-    /*
-    getSpicy getVegeterian getVegan (criteria)
-     */
+
 }
