@@ -19,7 +19,6 @@ public class IngredientsGroupController {
     private final IngredientGroupService ingredientGroupService;
     @ResponseBody
     @GetMapping("/products/group/all")
-    @PreAuthorize("hasAuthority('ingredient:read')")
     public ResponseEntity<List<IngredientGroupView>> getAllGroups(
     ) {
         return ResponseEntity
@@ -48,6 +47,19 @@ public class IngredientsGroupController {
         return ResponseEntity
                 .ok()
                 .body(ingredientGroupService.addIngredients(groupUUID, ingredient));
+    }
+
+    @DeleteMapping("/products/group/{uuid}")
+    @PreAuthorize("hasAuthority('ingredient:delete')")
+    public ResponseEntity deleteGroup(@PathVariable UUID uuid
+    ) {
+        try {
+            ingredientGroupService.delete(uuid);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity
+                .ok().build();
     }
 
 }

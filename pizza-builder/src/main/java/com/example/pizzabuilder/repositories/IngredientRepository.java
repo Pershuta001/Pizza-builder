@@ -3,6 +3,7 @@ package com.example.pizzabuilder.repositories;
 import com.example.pizzabuilder.model.Ingredient;
 import com.example.pizzabuilder.model.IngredientGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -22,4 +23,11 @@ public interface IngredientRepository extends JpaRepository<Ingredient, UUID> {
             "where pattern_uuid = ?1)", nativeQuery = true)
     List<Ingredient> getByPatternUUID(UUID patternUUID);
 
+    @Modifying
+    @Query(value = "DELETE FROM pizzabuilder.public.ingredient_group_ingredients WHERE ingredients_uuid = ?1 " +
+            "AND ingredients_uuid not in (" +
+            "select ingredient_uuid " +
+            "from pizzabuilder.public.ingredient_in_pizza " +
+            ") ", nativeQuery = true)
+    void deleteRelations(UUID uuid);
 }

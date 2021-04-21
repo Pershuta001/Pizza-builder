@@ -34,6 +34,6 @@ public class IngredientGroup {
     @Column(name = "label", nullable = false)
     private String label;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<Ingredient> ingredients;
 }

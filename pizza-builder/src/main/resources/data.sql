@@ -144,3 +144,5 @@ VALUES ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','2ce1ef95-2bf3-4ec8-8702-be205dc2
        ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','36c2ad28-855d-4486-b426-3e4961499aff','d56ef4ec-2f16-45e0-9e97-ae5236a06213'),
        ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','0b2c03ee-4436-4de5-a27b-d1f276fd8680','d56ef4ec-2f16-45e0-9e97-ae5236a06213'),
        ('d56ef4ec-2f16-45e0-9e97-ae5236a06213','d2d1b18e-1e7f-4a75-82c0-5a85a82bad3f','d56ef4ec-2f16-45e0-9e97-ae5236a06213');
+
+select ingredient_uuid from pizzabuilder.public.ingredient_in_pizza;
