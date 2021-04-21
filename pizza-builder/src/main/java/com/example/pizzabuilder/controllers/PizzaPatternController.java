@@ -23,9 +23,9 @@ public class PizzaPatternController {
     private final PizzaPatternService patternService;
     private final PizzaPatternConvertor pizzaPatternConvertor;
     private final IngredientInPizzaService ingredientInPizzaService;
-    private final IngredientService ingredientService;
 
     @ResponseBody
+    @PreAuthorize("hasAuthority('pizza_pattern:read')")
     @GetMapping("/patterns/all")
     public ResponseEntity<List<PizzaPatternFullView>> getAllPatterns(
     ){
