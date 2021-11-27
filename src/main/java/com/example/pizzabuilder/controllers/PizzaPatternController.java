@@ -107,4 +107,9 @@ public class PizzaPatternController {
         }
         return ResponseEntity.ok().build();
     }
+    
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok("Deploy success");
+    }
 }
