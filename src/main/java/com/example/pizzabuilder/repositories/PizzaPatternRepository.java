@@ -17,4 +17,6 @@ public interface PizzaPatternRepository extends JpaRepository<PizzaPattern, UUID
     List<PizzaPattern> findByConfirmed(Boolean confirmed);
 
     List<PizzaPattern> getAllByUserEntityUUID(UserEntity uuid);
+
+    void deleteByUuid(UUID uuid);
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 public class PizzaPatternController {
+
     private final PizzaPatternService patternService;
     private final PizzaPatternConvertor pizzaPatternConvertor;
     private final IngredientInPizzaService ingredientInPizzaService;
@@ -92,5 +94,17 @@ public class PizzaPatternController {
         return ResponseEntity
                 .ok()
                 .body(pizzaPatternConvertor.convert(patternService.setConfirmed(patternUuid, true)));
+    }
+
+    @DeleteMapping("/pattern/{uuid}")
+    @PreAuthorize("hasAuthority('pizza_pattern:delete')")
+    public ResponseEntity deletePattern(@PathVariable UUID uuid
+    ) {
+        try {
+            patternService.delete(uuid);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
     }
 }

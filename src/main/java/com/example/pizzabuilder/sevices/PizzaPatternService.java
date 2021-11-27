@@ -97,6 +97,11 @@ public class PizzaPatternService {
         }
         return res;
     }
+
+    @Transactional
+    public void delete(UUID patternId){
+        pizzaPatternRepository.deleteByUuid(patternId);
+    }
     /*
     getWithCriteriaParams
     getSortedWithCriteriaParams

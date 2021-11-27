@@ -11,13 +11,13 @@ import java.util.UUID;
 public interface PizzaInOrderRepository extends JpaRepository<PizzaInOrder, PizzaInOrderId> {
 
     @Query(value = "SELECT * " +
-            "FROM pizzabuilder.public.pizza_in_order p " +
+            "FROM pizza.public.pizza_in_order p " +
             "WHERE p.orders_uuid IN ( " +
             "   SELECT o.uuid " +
-            "   From pizzabuilder.public.orders o " +
+            "   From pizza.public.orders o " +
             "   where o.user_uuid in ( " +
             "         Select u.uuid " +
-            "         from pizzabuilder.public.users u " +
+            "         from pizza.public.users u " +
             "         WHERE u.email = ?1"+
             "" +
             ") AND o.status = 'IN_CART'" +
