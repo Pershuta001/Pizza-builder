@@ -93,7 +93,7 @@ public class OrderController {
             @PathVariable UUID uuid,
             @PathVariable Integer size
     ) {
-        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+       String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, -1)));

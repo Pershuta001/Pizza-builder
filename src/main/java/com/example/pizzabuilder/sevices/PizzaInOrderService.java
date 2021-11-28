@@ -52,15 +52,13 @@ public class PizzaInOrderService {
     @Transactional
     public void delete(UUID pattern, Integer size) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserEntity user = userRepository.findByEmail(email).get();
-        List<Order> orders = orderRepository.findByStatusAndUserEntity(OrderStatusEnum.IN_CART, user);
-        if (orders.isEmpty()) {
-            return;
-        }
-        Order order = orders.get(0);
-        for (PizzaInOrder pizzaInOrder : order.getPizzaInOrders()) {
-            if (pizzaInOrder.getId().getPizzaPatternUUID().equals(pattern) && pizzaInOrder.getId().getPizzaSize().equals(size)) {
-                pizzaInOrderRepository.deleteById(pizzaInOrder.getId());
+        Optional<Order> actualOrder = orderRepository.getCart(userRepository.findByEmail(email).get());
+        Integer id = actualOrder.get().getId();
+        List<PizzaInOrder> pizzaInOrder = pizzaInOrderRepository.findAllByOrderId(id);
+        for (PizzaInOrder pizza : pizzaInOrder) {
+            if (pizza.getId().getPizzaSize().equals(size) &&
+                    pizza.getId().getPizzaPatternUUID().equals(pattern)) {
+                pizzaInOrderRepository.deleteById(pizza.getId());
             }
         }
     }
@@ -119,8 +117,9 @@ public class PizzaInOrderService {
     @Transactional
     public PizzaInOrder increment(String email, UUID patternUuid, Integer size, Integer val) {
         Optional<Order> actualOrder = orderRepository.getCart(userRepository.findByEmail(email).get());
-        Order cart = actualOrder.get();
-        for (PizzaInOrder pizza : cart.getPizzaInOrders()) {
+        Integer id = actualOrder.get().getId();
+        List<PizzaInOrder> pizzaInOrder = pizzaInOrderRepository.findAllByOrderId(id);
+        for (PizzaInOrder pizza : pizzaInOrder) {
             if (pizza.getId().getPizzaSize().equals(size) &&
                     pizza.getId().getPizzaPatternUUID().equals(patternUuid)) {
                 double price = pizza.getPrice() / pizza.getQuantity();

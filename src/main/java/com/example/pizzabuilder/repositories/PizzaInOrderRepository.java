@@ -33,5 +33,13 @@ public interface PizzaInOrderRepository extends JpaRepository<PizzaInOrder, Pizz
     )
     List<PizzaInOrder> findAllByIdAndSize(UUID pattern, Integer size);
 
+    @Query(value = " select * " +
+            "from pizza_in_order " +
+            "where orders_uuid = ?1",
+            nativeQuery = true)
+    List<PizzaInOrder> findAllByOrderId(Integer orderId);
+
+
+
 
 }
