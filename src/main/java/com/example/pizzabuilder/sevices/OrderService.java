@@ -80,7 +80,9 @@ public class OrderService {
         Optional<PizzaInOrder> pizzaInOrderOptional = pizzaInOrderRepository.findById(id);
         if (pizzaInOrderOptional.isPresent()) {
             pizzaInOrder = pizzaInOrderOptional.get();
+            double price = pizzaInOrder.getPrice()/pizzaInOrder.getQuantity();
             pizzaInOrder.setQuantity(pizzaInOrder.getQuantity() + 1);
+            pizzaInOrder.setPrice(pizzaInOrder.getQuantity()*price);
         } else {
             pizzaInOrder = new PizzaInOrder();
             pizzaInOrder.setId(id);
@@ -97,12 +99,13 @@ public class OrderService {
     public FullOrderView confirmOrder(Address address) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity userEntity = userRepository.findByEmail(email).get();
-        FullOrderView res = new FullOrderView();
         List<Order> all = orderRepository.findAll();
-        res.setCheckId(new Random().nextInt() * 100000);
-        res.setTotalPrice(cartPrice());
-        res.setAddress(address);
-        res.setUserName(userEntity.getName());
+        FullOrderView res = FullOrderView.builder()
+                .checkId(new Random().nextInt() * 100000)
+                .totalPrice(cartPrice())
+                .address(address)
+                .userName(userEntity.getName())
+                .build();
         List<PizzaInOrderView> userCart = service.getUserCart(email);
         res.setPatternViewList(pizzaInOrderConvertor.convert(userCart));
         for (Order order : all) {

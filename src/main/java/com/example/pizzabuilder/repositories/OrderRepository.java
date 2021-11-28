@@ -16,6 +16,12 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     List<Order> findByStatusAndUserEntity(OrderStatusEnum status, UserEntity userEntity);
 
+    @Query(value = "select * " +
+            "from orders " +
+            "where status IS 'IN_CART' AND user_uuid IS ?1 " +
+            "", nativeQuery = true)
+    Optional<Order> getCart(UserEntity userEntity);
+
     Optional<Order> findById(Integer uuid);
 
     void deleteById(Integer id);
