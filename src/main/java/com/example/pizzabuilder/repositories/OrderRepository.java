@@ -18,7 +18,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     @Query(value = "select * " +
             "from orders " +
-            "where status IS 'IN_CART' AND user_uuid IS ?1 " +
+            "where status = 'IN_CART' AND user_uuid = ?1 " +
             "", nativeQuery = true)
     Optional<Order> getCart(UserEntity userEntity);
 
