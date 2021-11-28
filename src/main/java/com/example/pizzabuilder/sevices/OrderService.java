@@ -66,22 +66,29 @@ public class OrderService {
         UserEntity userEntity = userRepository.findByEmail(email).get();
         List<Order> orders = orderRepository.findByStatusAndUserEntity(OrderStatusEnum.IN_CART, userEntity);
         Order order = null;
-        if(orders.isEmpty()){
+        PizzaInOrder pizzaInOrder = null;
+        if (orders.isEmpty()) {
             order = orderConvertor.convert(newOrder);
             order.setUserEntity(userEntity);
             order.setStatus(OrderStatusEnum.IN_CART);
             order.setTotalPrice(0.);
             order = orderRepository.save(order);
-        }else{
+        } else {
             order = orders.get(0);
         }
-
-        PizzaInOrder pizzaInOrder = new PizzaInOrder();
-        pizzaInOrder.setId(new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize()));
-        pizzaInOrder.setQuantity(newOrder.getAmount());
-        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern()) * newOrder.getSize());
-        order.setTotalPrice(pizzaInOrder.getPrice());
+        PizzaInOrderId id = new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize());
+        Optional<PizzaInOrder> pizzaInOrderOptional = pizzaInOrderRepository.findById(id);
+        if (pizzaInOrderOptional.isPresent()) {
+            pizzaInOrder = pizzaInOrderOptional.get();
+            pizzaInOrder.setQuantity(pizzaInOrder.getQuantity() + 1);
+        } else {
+            pizzaInOrder = new PizzaInOrder();
+            pizzaInOrder.setId(id);
+            pizzaInOrder.setQuantity(newOrder.getAmount());
+            pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern()) * newOrder.getSize());
+        }
         pizzaInOrderRepository.save(pizzaInOrder);
+        order.setTotalPrice(cartPrice());
         return order;
     }
 
