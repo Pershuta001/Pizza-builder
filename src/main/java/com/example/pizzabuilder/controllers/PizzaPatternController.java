@@ -89,11 +89,21 @@ public class PizzaPatternController {
     @ResponseBody
     @PreAuthorize("hasAuthority('pizza_pattern:confirm')")
     @PostMapping("/patterns/confirm/{patternUuid}")
-    public ResponseEntity<PizzaPatternView> setConfirm(@PathVariable UUID patternUuid
+    public ResponseEntity<PizzaPatternView> setConfirmed(@PathVariable UUID patternUuid
     ) throws Exception {
         return ResponseEntity
                 .ok()
                 .body(pizzaPatternConvertor.convert(patternService.setConfirmed(patternUuid, true)));
+    }
+
+    @ResponseBody
+    @PreAuthorize("hasAuthority('pizza_pattern:confirm')")
+    @PostMapping("/patterns/unconfirm/{patternUuid}")
+    public ResponseEntity<PizzaPatternView> setUnconfirmed(@PathVariable UUID patternUuid
+    ) throws Exception {
+        return ResponseEntity
+                .ok()
+                .body(pizzaPatternConvertor.convert(patternService.setConfirmed(patternUuid, false)));
     }
 
     @DeleteMapping("/pattern/{uuid}")
@@ -107,9 +117,6 @@ public class PizzaPatternController {
         }
         return ResponseEntity.ok().build();
     }
-    
-    @GetMapping("/test")
-    public ResponseEntity<String> test(){
-        return ResponseEntity.ok("Deploy success");
-    }
+
+
 }

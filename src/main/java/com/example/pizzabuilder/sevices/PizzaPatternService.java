@@ -6,6 +6,7 @@ import com.example.pizzabuilder.repositories.IngredientRepository;
 import com.example.pizzabuilder.repositories.IngredientsInPizzaRepository;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
 import com.example.pizzabuilder.repositories.UserRepository;
+import com.example.pizzabuilder.view.IngredientInPizzaView;
 import com.example.pizzabuilder.view.PizzaPatternView;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
@@ -102,6 +103,7 @@ public class PizzaPatternService {
     public void delete(UUID patternId){
         pizzaPatternRepository.deleteByUuid(patternId);
     }
+
     /*
     getWithCriteriaParams
     getSortedWithCriteriaParams

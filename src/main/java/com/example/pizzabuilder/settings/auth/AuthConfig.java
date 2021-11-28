@@ -47,7 +47,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/secured-api").hasRole(RolesEnum.USER.name())
                 .antMatchers("/secured-api-admin").hasRole(RolesEnum.ADMIN.name())
-                .antMatchers("/","/test", "/sign-up", "/patterns/confirmed", "/patterns/{patternUuid}", "/products/group/all", "/products/all", "/products/{groupUuid}")
+                .antMatchers("/", "/sign-up", "/patterns/confirmed", "/patterns/{patternUuid}", "/products/group/all", "/products/all", "/products/{groupUuid}")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
