@@ -26,7 +26,7 @@ public class UserEntity {
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
 
-    @Column(name = "roleId")
+    @Column(name = "role_id")
     private Integer roleId;
 
     @OneToMany(fetch = FetchType.LAZY)
@@ -52,7 +52,7 @@ public class UserEntity {
     @Column(name = "hashed_password", nullable = false)
     private String hashed_password;
 
-    @Column(name="photoUrl")
+    @Column(name="photo_url")
     private String photoUrl;
 
 }

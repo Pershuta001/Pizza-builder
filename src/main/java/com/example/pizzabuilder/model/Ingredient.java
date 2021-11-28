@@ -42,6 +42,6 @@ public class Ingredient {
     @Column(name = "vegan")
     private Boolean vegan;
 
-    @Column(name="photoUrl")
+    @Column(name="photo_url")
     private String photoUrl;
 }

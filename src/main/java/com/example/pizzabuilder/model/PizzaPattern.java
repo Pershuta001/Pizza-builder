@@ -40,7 +40,7 @@ public class PizzaPattern {
     @OneToMany
     private List<IngredientInPizza> ingredients;
 
-    @Column(name="photoUrl")
+    @Column(name="photo_url")
     private String photoUrl;
 
 }

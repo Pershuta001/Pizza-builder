@@ -17,17 +17,17 @@ public interface IngredientRepository extends JpaRepository<Ingredient, UUID> {
 
     Optional<Ingredient> findByUuid(UUID uuid);
 
-    @Query(value = "select * from pizza.public.ingredient i where i.uuid in (" +
+    @Query(value = "select * from ingredient i where i.uuid in (" +
             "select ip.ingredient_uuid" +
             " from ingredient_in_pizza ip " +
             "where pattern_uuid = ?1)", nativeQuery = true)
     List<Ingredient> getByPatternUUID(UUID patternUUID);
 
     @Modifying
-    @Query(value = "DELETE FROM pizza.public.ingredient_group_ingredients WHERE ingredients_uuid = ?1 " +
+    @Query(value = "DELETE FROM ingredient_group_ingredients WHERE ingredients_uuid = ?1 " +
             "AND ingredients_uuid not in (" +
             "select ingredient_uuid " +
-            "from pizza.public.ingredient_in_pizza " +
+            "from ingredient_in_pizza " +
             ") ", nativeQuery = true)
     void deleteRelations(UUID uuid);
 }
