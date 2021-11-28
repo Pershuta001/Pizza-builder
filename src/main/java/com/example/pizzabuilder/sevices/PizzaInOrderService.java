@@ -57,7 +57,7 @@ public class PizzaInOrderService {
         if (orders.isEmpty()) {
             return;
         }
-        Order order=orders.get(0);
+        Order order = orders.get(0);
         for (PizzaInOrder pizzaInOrder : order.getPizzaInOrders()) {
             if (pizzaInOrder.getId().getPizzaPatternUUID().equals(pattern) && pizzaInOrder.getId().getPizzaSize().equals(size)) {
                 pizzaInOrderRepository.deleteById(pizzaInOrder.getId());
@@ -118,19 +118,14 @@ public class PizzaInOrderService {
 
     @Transactional
     public PizzaInOrder increment(String email, UUID patternUuid, Integer size, Integer val) {
-        Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
-        if(!userEntityOptional.isPresent()){
-            return null;
-        }
-        Optional<Order> actualOrder = orderRepository.getCart(userEntityOptional.get());
-        if(!actualOrder.isPresent()){
-            return null;
-        }
+        Optional<Order> actualOrder = orderRepository.getCart(userRepository.findByEmail(email).get());
         Order cart = actualOrder.get();
         for (PizzaInOrder pizza : cart.getPizzaInOrders()) {
             if (pizza.getId().getPizzaSize().equals(size) &&
                     pizza.getId().getPizzaPatternUUID().equals(patternUuid)) {
+                double price = pizza.getPrice() / pizza.getQuantity();
                 pizza.setQuantity(pizza.getQuantity() + val);
+                pizza.setPrice(pizza.getQuantity() * price);
                 pizzaInOrderRepository.save(pizza);
                 return pizza;
             }

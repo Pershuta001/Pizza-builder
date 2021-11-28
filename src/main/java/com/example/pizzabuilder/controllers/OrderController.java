@@ -63,7 +63,7 @@ public class OrderController {
 
    @ResponseBody
     @PutMapping("/pattern/increment/{uuid}/{size}")
-    @PreAuthorize("hasAuthority('pizza_pattern:read')")
+    @PreAuthorize("hasAuthority('order:create')")
     public ResponseEntity<PizzaInOrderWithPatternName> increment(
             @PathVariable UUID uuid,
             @PathVariable Integer size

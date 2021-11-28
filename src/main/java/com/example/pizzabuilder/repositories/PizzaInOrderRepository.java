@@ -32,4 +32,6 @@ public interface PizzaInOrderRepository extends JpaRepository<PizzaInOrder, Pizz
                     "WHERE pizza_pattern_uuid = ?1 AND pizza_size = ?2",nativeQuery = true
     )
     List<PizzaInOrder> findAllByIdAndSize(UUID pattern, Integer size);
+
+
 }

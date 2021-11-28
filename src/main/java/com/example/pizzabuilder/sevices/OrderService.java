@@ -124,7 +124,7 @@ public class OrderService {
         List<PizzaInOrder> cartByUserEmail = pizzaInOrderRepository.getCartByUserEmail(email);
         double price = 0;
         for (PizzaInOrder pizzaInOrder : cartByUserEmail) {
-            price += pizzaInOrder.getPrice() * pizzaInOrder.getQuantity();
+            price += pizzaInOrder.getPrice();
         }
         return price;
 
