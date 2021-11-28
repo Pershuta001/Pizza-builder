@@ -63,16 +63,23 @@ public class OrderService {
     @Transactional
     public Order saveOrderToCart(OrderView newOrder, String email) {
 
-        Order order = orderConvertor.convert(newOrder);
-        order.setUserEntity(userRepository.findByEmail(email).get());
-        order.setStatus(OrderStatusEnum.IN_CART);
-        order.setTotalPrice(100.);
-        order = orderRepository.save(order);
+        UserEntity userEntity = userRepository.findByEmail(email).get();
+        List<Order> orders = orderRepository.findByStatusAndUserEntity(OrderStatusEnum.IN_CART, userEntity);
+        Order order = null;
+        if(orders.isEmpty()){
+            order = orderConvertor.convert(newOrder);
+            order.setUserEntity(userEntity);
+            order.setStatus(OrderStatusEnum.IN_CART);
+            order.setTotalPrice(0.);
+            order = orderRepository.save(order);
+        }else{
+            order = orders.get(0);
+        }
 
         PizzaInOrder pizzaInOrder = new PizzaInOrder();
         pizzaInOrder.setId(new PizzaInOrderId(newOrder.getPattern(), order.getId(), newOrder.getSize()));
         pizzaInOrder.setQuantity(newOrder.getAmount());
-        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern())* newOrder.getSize()*0.7);
+        pizzaInOrder.setPrice(pizzaPatternService.countPrice(newOrder.getPattern()) * newOrder.getSize());
         order.setTotalPrice(pizzaInOrder.getPrice());
         pizzaInOrderRepository.save(pizzaInOrder);
         return order;
@@ -85,14 +92,14 @@ public class OrderService {
         UserEntity userEntity = userRepository.findByEmail(email).get();
         FullOrderView res = new FullOrderView();
         List<Order> all = orderRepository.findAll();
-        res.setCheckId(new Random().nextInt()*100000);
+        res.setCheckId(new Random().nextInt() * 100000);
         res.setTotalPrice(cartPrice());
         res.setAddress(address);
         res.setUserName(userEntity.getName());
         List<PizzaInOrderView> userCart = service.getUserCart(email);
         res.setPatternViewList(pizzaInOrderConvertor.convert(userCart));
-        for (Order order:all) {
-            if(order.getUserEntity().equals(userEntity)) {
+        for (Order order : all) {
+            if (order.getUserEntity().equals(userEntity)) {
                 order.setStatus(OrderStatusEnum.ORDERED);
                 order.setAddress(address);
                 orderRepository.save(order);
@@ -106,7 +113,7 @@ public class OrderService {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<PizzaInOrder> cartByUserEmail = pizzaInOrderRepository.getCartByUserEmail(email);
         double price = 0;
-        for(PizzaInOrder pizzaInOrder: cartByUserEmail){
+        for (PizzaInOrder pizzaInOrder : cartByUserEmail) {
             price += pizzaInOrder.getPrice() * pizzaInOrder.getQuantity();
         }
         return price;
