@@ -57,7 +57,7 @@ public class PizzaInOrderService {
         if (orders.isEmpty()) {
             return;
         }
-        Order order = orders.get(0);
+        Order order=orders.get(0);
         for (PizzaInOrder pizzaInOrder : order.getPizzaInOrders()) {
             if (pizzaInOrder.getId().getPizzaPatternUUID().equals(pattern) && pizzaInOrder.getId().getPizzaSize().equals(size)) {
                 pizzaInOrderRepository.deleteById(pizzaInOrder.getId());
@@ -100,25 +100,30 @@ public class PizzaInOrderService {
 
     @Transactional
     public List<PizzaInOrderView> getUserCart(String email) {
-        UserEntity userEntity = userRepository.findByEmail(email).get();
-        List<PizzaInOrder> pizzaInOrder = orderRepository.getCart(userEntity).get().getPizzaInOrders();
+        List<PizzaInOrder> pizzaInOrder = pizzaInOrderRepository.getCartByUserEmail(email);
         List<PizzaInOrderView> res = new ArrayList<>();
 
-        for (PizzaInOrder pizza : pizzaInOrder)
-        {
-            res.add(pizzaInOrderConvertor.convert(pizza));
+        for (PizzaInOrder pizza : pizzaInOrder) {
+            PizzaInOrderView p = contains(res, pizza);
+            if (p != null) {
+                p.setQuantity(p.getQuantity() + pizza.getQuantity());
+                p.setPrice(p.getPrice() * p.getQuantity());
+            } else {
+                res.add(pizzaInOrderConvertor.convert(pizza));
+            }
         }
+
         return res;
     }
 
     @Transactional
     public PizzaInOrder increment(String email, UUID patternUuid, Integer size, Integer val) {
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
-        if (!userEntityOptional.isPresent()) {
+        if(!userEntityOptional.isPresent()){
             return null;
         }
         Optional<Order> actualOrder = orderRepository.getCart(userEntityOptional.get());
-        if (!actualOrder.isPresent()) {
+        if(!actualOrder.isPresent()){
             return null;
         }
         Order cart = actualOrder.get();
