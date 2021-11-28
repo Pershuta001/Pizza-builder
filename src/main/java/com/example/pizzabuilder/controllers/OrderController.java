@@ -61,7 +61,7 @@ public class OrderController {
     }
 
 
-    @ResponseBody
+ /*   @ResponseBody
     @PutMapping("/pattern/increment/{uuid}/{size}")
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
     public ResponseEntity<PizzaInOrderWithPatternName> increment(
@@ -85,7 +85,7 @@ public class OrderController {
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, val)));
-    }
+    }*/
     @ResponseBody
     @PutMapping("/pattern/decrement/{uuid}/{size}")
     @PreAuthorize("hasAuthority('pizza_pattern:read')")

@@ -1,6 +1,7 @@
 package com.example.pizzabuilder.sevices;
 
 import com.example.pizzabuilder.convertors.PizzaInOrderConvertor;
+import com.example.pizzabuilder.enums.OrderStatusEnum;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.*;
 import com.example.pizzabuilder.repositories.OrderRepository;
@@ -48,17 +49,18 @@ public class PizzaInOrderService {
     }
 
 
-
     @Transactional
     public void delete(UUID pattern, Integer size) {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UserEntity user = userRepository.findByEmail(email).get();
-        List<PizzaInOrder> allByIdAndSize = pizzaInOrderRepository.findAllByIdAndSize(pattern, size);
-        for(PizzaInOrder pizzaInOrder: allByIdAndSize){
-            Order order = orderRepository.findById(pizzaInOrder.getId().getOrdersUUID()).get();
-            if(order.getUserEntity().getUuid().equals(user.getUuid())) {
+        List<Order> orders = orderRepository.findByStatusAndUserEntity(OrderStatusEnum.IN_CART, user);
+        if (orders.isEmpty()) {
+            return;
+        }
+        Order order=orders.get(0);
+        for (PizzaInOrder pizzaInOrder : order.getPizzaInOrders()) {
+            if (pizzaInOrder.getId().getPizzaPatternUUID().equals(pattern) && pizzaInOrder.getId().getPizzaSize().equals(size)) {
                 pizzaInOrderRepository.deleteById(pizzaInOrder.getId());
-                orderRepository.deleteById(order.getId());
             }
         }
     }
@@ -106,7 +108,7 @@ public class PizzaInOrderService {
             PizzaInOrderView p = contains(res, pizza);
             if (p != null) {
                 p.setQuantity(p.getQuantity() + pizza.getQuantity());
-                p.setPrice(p.getPrice()* p.getQuantity());
+                p.setPrice(p.getPrice() * p.getQuantity());
             } else {
                 res.add(pizzaInOrderConvertor.convert(pizza));
             }
