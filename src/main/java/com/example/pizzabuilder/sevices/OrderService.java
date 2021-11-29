@@ -20,10 +20,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.rmi.NoSuchObjectException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -37,13 +35,21 @@ public class OrderService {
     private final PizzaInOrderConvertor pizzaInOrderConvertor;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    public List<String> getAllStatuses(){
+       return Arrays.stream(OrderStatusEnum.values())
+               .filter(a -> !a.equals(OrderStatusEnum.IN_CART))
+               .map(OrderStatusEnum::name)
+               .collect(Collectors.toList());
+    }
+
+    @SneakyThrows
     @Transactional
-    public Order setStatus(UUID orderId, OrderStatusEnum status) throws Exception {
+    public Order setStatus(Integer orderId, String status) {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
         if (!orderOptional.isPresent())
             throw new Exception("No order with id " + orderId.toString());
         Order order = orderOptional.get();
-        order.setStatus(status);
+        order.setStatus(OrderStatusEnum.valueOf(status));
         return orderRepository.saveAndFlush(order);
     }
 
@@ -127,7 +133,6 @@ public class OrderService {
             price += pizzaInOrder.getPrice();
         }
         return price;
-
     }
 
     @SneakyThrows
@@ -143,4 +148,9 @@ public class OrderService {
         return res;
     }
 
+
+    public List<FullOrderView> getAllOrders(){
+        List<Order> orders = orderRepository.findByStatusIsNotLike(OrderStatusEnum.IN_CART);
+        return orderConvertor.convert(orders);
+    }
 }

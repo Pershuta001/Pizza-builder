@@ -17,6 +17,7 @@ public class FullOrderView {
     private Integer checkId;
     private Address address;
     private String userName;
+    private String status;
     private List<PizzaInOrderWithPatternName> patternViewList;
     private Double totalPrice;
 

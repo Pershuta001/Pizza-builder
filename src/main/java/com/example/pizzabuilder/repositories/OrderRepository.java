@@ -14,6 +14,9 @@ import java.util.UUID;
 public interface OrderRepository extends JpaRepository<Order, UUID> {
     List<Order> findByStatus(OrderStatusEnum status);
 
+    List<Order> findByStatusIsNotLike(OrderStatusEnum status);
+
+
     List<Order> findByStatusAndUserEntity(OrderStatusEnum status, UserEntity userEntity);
 
     @Query(value = "select * " +

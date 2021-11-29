@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -66,6 +67,10 @@ public class PizzaInOrderConvertor {
                 .size(pizzaInOrder.getId().getPizzaSize())
                 .patternUuid(pizzaInOrder.getId().getPizzaPatternUUID())
                 .quantity(pizzaInOrder.getQuantity()).build();
+    }
+
+    public List<PizzaInOrderWithPatternName> convertWithName(List<PizzaInOrder> pizzaInOrder){
+        return pizzaInOrder.stream().map(this::convertWithName).collect(Collectors.toList());
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.pizzabuilder.controllers;
 
+import com.example.pizzabuilder.convertors.OrderConvertor;
 import com.example.pizzabuilder.convertors.PizzaInOrderConvertor;
 import com.example.pizzabuilder.exceptions.EntityNotExistsException;
 import com.example.pizzabuilder.model.Address;
@@ -25,14 +26,15 @@ public class OrderController {
     private final OrderService orderService;
     private final PizzaInOrderService pizzaInOrderService;
     private final PizzaInOrderConvertor pizzaInOrderConvertor;
+    private final OrderConvertor orderConvertor;
 
     @ResponseBody
     @PostMapping("/cart/add")
     @PreAuthorize("hasAuthority('order:create')")
     public ResponseEntity<String> addNewOrderToCart(
             @RequestBody OrderView orderView
-            ){
-        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    ) {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Order order = orderService.saveOrderToCart(orderView, email);
         return ResponseEntity
                 .ok()
@@ -44,7 +46,7 @@ public class OrderController {
     @PreAuthorize("hasAuthority('order:create')")
     public ResponseEntity<FullOrderView> confirmOrder(
             @RequestBody Address address
-            ){
+    ) {
         return ResponseEntity
                 .ok()
                 .body(orderService.confirmOrder(address));
@@ -54,25 +56,26 @@ public class OrderController {
     @GetMapping("/cart")
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
     public ResponseEntity<List<PizzaInOrderWithPatternName>> getCart() throws EntityNotExistsException {
-        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderConvertor.convert(pizzaInOrderService.getUserCart(email)));
     }
 
 
-   @ResponseBody
+    @ResponseBody
     @PutMapping("/pattern/increment/{uuid}/{size}")
     @PreAuthorize("hasAuthority('order:create')")
     public ResponseEntity<PizzaInOrderWithPatternName> increment(
             @PathVariable UUID uuid,
             @PathVariable Integer size
     ) {
-        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, 1)));
     }
+
     @ResponseBody
     @PutMapping("/pattern/increment/{uuid}/{size}/{val}")
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
@@ -81,11 +84,12 @@ public class OrderController {
             @PathVariable Integer size,
             @PathVariable Integer val
     ) {
-        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, val)));
     }
+
     @ResponseBody
     @PutMapping("/pattern/decrement/{uuid}/{size}")
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
@@ -93,11 +97,12 @@ public class OrderController {
             @PathVariable UUID uuid,
             @PathVariable Integer size
     ) {
-       String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, -1)));
     }
+
     @ResponseBody
     @PutMapping("/pattern/decrement/{uuid}/{size}/{val}")
     @PreAuthorize("hasAuthority('pizza_pattern:read')")
@@ -106,7 +111,7 @@ public class OrderController {
             @PathVariable Integer size,
             @PathVariable Integer val
     ) {
-        String email = (String)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderConvertor.convertWithName(pizzaInOrderService.increment(email, uuid, size, -val)));
@@ -130,12 +135,13 @@ public class OrderController {
     @PreAuthorize("hasAuthority('pizza_in_order:create')")
     public ResponseEntity<String> addNewPizzaInOrder(
             @RequestBody PizzaInOrderView pizzaInOrderView
-            ) throws Exception {
+    ) throws Exception {
         PizzaInOrder pizzaInOrder = pizzaInOrderService.saveNewPizzaInOrder(pizzaInOrderView);
         return ResponseEntity
                 .ok()
                 .body(pizzaInOrderService.responsePizzaInOrder(pizzaInOrder));
     }
+
     @SneakyThrows
     @ResponseBody
     @PutMapping("/update-pizza-in-order")
@@ -157,5 +163,28 @@ public class OrderController {
     ) {
         pizzaInOrderService.delete(uuid, size);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @ResponseBody
+    @GetMapping("/orders")
+    @PreAuthorize("hasAuthority('pizza_in_order:read')")
+    public ResponseEntity<List<FullOrderView>> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
+    }
+
+    @ResponseBody
+    @GetMapping("/orders/statuses")
+    @PreAuthorize("hasAuthority('order:read')")
+    public ResponseEntity<List<String>> getAllStatuses() {
+        return ResponseEntity.ok(orderService.getAllStatuses());
+    }
+
+    @ResponseBody
+    @PutMapping("/order/update/status")
+    @PreAuthorize("hasAuthority('order:update')")
+    public ResponseEntity<FullOrderView> updateOrderStatus(
+            @RequestBody StatusChangeView statusChangeView
+    ) {
+        return ResponseEntity.ok(orderConvertor.convert(orderService.setStatus(statusChangeView.getOrderId(), statusChangeView.getStatus())));
     }
 }
