@@ -4,9 +4,11 @@ import com.example.pizzabuilder.enums.OrderStatusEnum;
 import com.example.pizzabuilder.model.Order;
 import com.example.pizzabuilder.model.PizzaInOrder;
 import com.example.pizzabuilder.model.PizzaPattern;
+import com.example.pizzabuilder.model.UserEntity;
 import com.example.pizzabuilder.repositories.OrderRepository;
 import com.example.pizzabuilder.repositories.PizzaInOrderRepository;
 import com.example.pizzabuilder.repositories.PizzaPatternRepository;
+import com.example.pizzabuilder.repositories.UserRepository;
 import com.example.pizzabuilder.view.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,7 @@ public class OrderConvertor {
 
     private final PizzaInOrderRepository pizzaInOrderRepository;
     private final PizzaInOrderConvertor pizzaInOrderConvertor;
+private  final UserRepository userRepository;
 
     public Order convert(OrderView orderView) {
         return Order.builder()
@@ -39,6 +42,8 @@ public class OrderConvertor {
         return FullOrderView.builder()
                 .checkId(order.getId())
                 .userName(order.getUserEntity().getName())
+                .userEmail(order.getUserEntity().getEmail())
+                .userPhone(order.getUserEntity().getPhone())
                 .address(order.getAddress())
                 .status(order.getStatus().name())
                 .patternViewList(pizzaInOrderWithPatternNames)

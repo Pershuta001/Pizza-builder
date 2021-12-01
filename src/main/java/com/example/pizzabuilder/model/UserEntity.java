@@ -43,7 +43,7 @@ public class UserEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private String phone;
 
     @Embedded
